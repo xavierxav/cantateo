@@ -16,7 +16,7 @@ whitenoise>=6.6
 dj-database-url>=2.1
 django-storages>=1.14
 boto3>=1.34
-sentry-sdk>=2.0
+sentry-sdk>=2.68.1
 
 # Cache backend (optional, fallback to LocMemCache if not available)
 django-redis>=5.4
