@@ -30,7 +30,7 @@ pydub>=0.25.1  # WAV to MP3 conversion
 mutagen>=1.48.1  # MP3 validation (check duration, bitrate, integrity)
 
 # Developer tools
-djlint>=1.36.0  # Django HTML formatter
+djlint>=1.45.2  # Django HTML formatter
 
 # Import scripts dependencies
 google-genai>=1.0
