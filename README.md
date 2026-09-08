@@ -9,6 +9,8 @@ Live: **https://www.cantateo.fr**
 
 French Django app serving the daily liturgical psalm with PDF score and multi-track SATB audio (Soprano, Alto, Tenor, Bass + instrumental), backed by PostgreSQL full-text search and a computed liturgical calendar with AELF fallback.
 
+![Cantateo — daily psalm page with SATB audio mixer](assets/screenshot.png)
+
 ## Features
 
 - **Daily chant** — psalm/canticle of the day with PDF partition and 5 audio tracks
