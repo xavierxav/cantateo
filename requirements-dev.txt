@@ -1,6 +1,6 @@
 -r requirements.txt
 
-ruff>=0.6
+ruff>=0.16.6
 pip-audit>=2.7
 playwright>=1.46
 pytest-playwright>=0.5
