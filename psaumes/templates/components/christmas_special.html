@@ -1,0 +1,58 @@
+<div class="chant-container">
+    <div class="row g-4 content-block-gap">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden mb-4 glass-card">
+                <!-- Title inside the card -->
+                <div class="p-4 border-bottom border-light text-center">
+                    <h2 class="h1 mb-0 fw-bold animate-fade-in text-dark">
+                        <i class="bi bi-star-fill text-warning me-3"></i>Nativité du Seigneur
+                    </h2>
+                </div>
+                <div class="card-body p-0 bg-transparent">
+                    <div class="list-group list-group-flush bg-transparent">
+                        {% for moment in noel_moments %}
+                            <a href="{{ moment.psaume.get_absolute_url }}"
+                               class="list-group-item list-group-item-action py-3 px-4 border-start border-4 border-light-subtle bg-transparent hover-bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="h5 mb-0 fw-bold text-dark">{{ moment.nom_fete|slice:"7:"|default:moment.nom_fete }}</span>
+                                    <span class="badge rounded-pill bg-primary px-3">{{ moment.psaume.nom_psaume }}</span>
+                                </div>
+                                <p class="mb-0 text-muted small">{{ moment.psaume.titre }}</p>
+                            </a>
+                        {% empty %}
+                            <div class="p-4 text-center text-muted italic">Partitions bientôt disponibles</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .glass-card {
+        background-color: rgba(255, 255, 255, 0.65) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .hover-bg-light:hover {
+        background-color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+</style>

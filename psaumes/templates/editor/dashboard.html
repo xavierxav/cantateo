@@ -1,0 +1,18 @@
+{% extends "editor/base.html" %}
+
+{% block content %}
+    <h1>Saisie simplifiée</h1>
+    <div class="simplified-editor-grid">
+        <section class="simplified-editor-card">
+            <h2>Messages du site</h2>
+            <p>Créer, modifier et activer le message affiché sur le site.</p>
+            <p class="simplified-editor-help">Un seul message peut être actif à la fois.</p>
+            <a class="button" href="{% url 'simplified_banner_list' %}">Ouvrir</a>
+        </section>
+        <section class="simplified-editor-card">
+            <h2>Partitions</h2>
+            <p>Ajouter une partition PDF, un MXL et les fichiers MP3 pour un psaume.</p>
+            <a class="button" href="{% url 'simplified_partition_moments' %}">Nouvelle partition</a>
+        </section>
+    </div>
+{% endblock %}

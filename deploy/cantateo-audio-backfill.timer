@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Cantateo audio backfill enqueue every hour
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+AccuracySec=1min
+Persistent=true
+Unit=cantateo-audio-backfill.service
+
+[Install]
+WantedBy=timers.target

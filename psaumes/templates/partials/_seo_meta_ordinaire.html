@@ -1,0 +1,19 @@
+{% load static %}
+{% if partie_label %}
+<meta property="og:title" content="{{ partie_label }} — {{ ordinaire.titre }} — Cantateo">
+<meta property="og:description" content="{{ partie_label }} de la messe « {{ ordinaire.titre }} »{% if ordinaire.compositeur %} par {{ ordinaire.compositeur }}{% endif %} : partition PDF et pistes audio à 4 voix (SATB).">
+<meta property="og:type" content="music.song">
+{% if ordinaire.compositeur %}<meta property="music:musician" content="{{ ordinaire.compositeur }}">{% endif %}
+<meta name="twitter:title" content="{{ partie_label }} — {{ ordinaire.titre }} — Cantateo">
+<meta name="twitter:description" content="{{ partie_label }} de la messe « {{ ordinaire.titre }} »{% if ordinaire.compositeur %} par {{ ordinaire.compositeur }}{% endif %}.">
+{% elif ordinaire %}
+<meta property="og:title" content="{{ ordinaire.titre }} — Cantateo">
+<meta property="og:description" content="Ordinaire de messe « {{ ordinaire.titre }} »{% if ordinaire.compositeur %} par {{ ordinaire.compositeur }}{% endif %} : Kyrie, Gloria, Sanctus, Agnus Dei avec partitions PDF et pistes audio mp3 à 4 voix.">
+<meta property="og:type" content="music.album">
+{% if ordinaire.compositeur %}<meta property="music:musician" content="{{ ordinaire.compositeur }}">{% endif %}
+<meta name="twitter:title" content="{{ ordinaire.titre }} — Cantateo">
+<meta name="twitter:description" content="Ordinaire de messe « {{ ordinaire.titre }} »{% if ordinaire.compositeur %} par {{ ordinaire.compositeur }}{% endif %}.">
+{% endif %}
+<meta property="og:url" content="{{ site_url }}{{ request.path }}">
+<meta property="og:image" content="{{ site_url }}{% static 'icons/icon-512.png' %}">
+<meta name="twitter:card" content="summary">

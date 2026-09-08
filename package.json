@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "js:check": "node scripts/check-js-syntax.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

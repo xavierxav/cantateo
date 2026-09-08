@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+
+{% block nav-global %}
+    {% if user.is_authenticated and user.is_staff %}
+        {% if user.is_superuser or perms.psaumes.use_simplified_editor %}
+            <a href="{% url 'simplified_partition_moments' %}" class="button">Nouvelle partition (saisie simplifiée)</a>
+        {% endif %}
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

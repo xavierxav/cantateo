@@ -1,0 +1,39 @@
+{% load liturgical_tags %}
+{% comment %}
+  Refactored component for liturgical indicators (color, season, year).
+  Variables: aelf_info (dict containing couleur, ligne1, annee, ligne2, ligne3, etc.)
+{% endcomment %}
+{% if aelf_info %}
+    <div class="small d-flex flex-row flex-wrap align-items-center column-gap-5 row-gap-1">
+        <div class="d-flex align-items-center gap-2">
+            {% if aelf_info.couleur %}
+                <span class="liturgical-color-dot"
+                      style="background-color: {{ aelf_info.couleur|liturgical_color }}"
+                      aria-hidden="true"></span>
+            {% endif %}
+            <span class="fw-semibold">{{ aelf_info.ligne1 }}
+                {% if aelf_info.annee %}— Année {{ aelf_info.annee }}{% endif %}
+            </span>
+        </div>
+        {% if aelf_info.ligne2 %}
+            <div class="text-muted" style="font-size: 0.85em;">
+                {% if aelf_info.couleur2 %}
+                    <span class="liturgical-color-dot liturgical-color-dot-sm"
+                          style="background-color: {{ aelf_info.couleur2|liturgical_color }}"
+                          aria-hidden="true"></span>
+                {% endif %}
+                {{ aelf_info.ligne2 }}
+            </div>
+        {% endif %}
+        {% if aelf_info.ligne3 %}
+            <div class="text-muted" style="font-size: 0.85em;">
+                {% if aelf_info.couleur3 %}
+                    <span class="liturgical-color-dot liturgical-color-dot-sm"
+                          style="background-color: {{ aelf_info.couleur3|liturgical_color }}"
+                          aria-hidden="true"></span>
+                {% endif %}
+                {{ aelf_info.ligne3 }}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

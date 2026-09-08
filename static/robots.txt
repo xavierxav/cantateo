@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /download/pdf/
+
+Sitemap: https://www.cantateo.fr/sitemap.xml

@@ -1,0 +1,16 @@
+{% extends "editor/base.html" %}
+
+{% block editor_breadcrumbs %} &rsaquo; <a href="{% url 'simplified_banner_list' %}">Messages du site</a> &rsaquo; Supprimer{% endblock %}
+
+{% block content %}
+    <h1>Supprimer le message</h1>
+    <p>Confirmer la suppression de ce message du site ?</p>
+    <blockquote>{{ banner.text|truncatechars:200 }}</blockquote>
+    <form method="post">
+        {% csrf_token %}
+        <div class="simplified-editor-actions">
+            <button type="submit" class="deletelink">Supprimer</button>
+            <a class="button" href="{% url 'simplified_banner_list' %}">Annuler</a>
+        </div>
+    </form>
+{% endblock %}

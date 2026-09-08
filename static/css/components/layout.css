@@ -1,0 +1,187 @@
+/* Layout, backgrounds and transparency */
+
+body {
+    background-color: #f8f9fa;
+    color: #222222;
+    min-height: 100vh;
+    min-height: 100svh;
+    position: relative; /* Référentiel pour le lecteur audio draggable */
+    margin: 0;
+}
+
+.skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 10000;
+    padding: 0.5rem 0.75rem;
+    background: #ffffff;
+    color: #0d6efd;
+    border: 2px solid #0d6efd;
+    border-radius: 4px;
+    transform: translateY(-150%);
+    transition: transform 0.15s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-within {
+    transform: translateY(0);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100lvh;
+    background-image: url('../../img/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.chant-container {
+    /* Suppression de position: relative pour que le lecteur s'aligne sur le body */
+}
+
+.chant-container .card:not(.audio-player-wrapper),
+.aelf-content-card,
+.chant-container .bg-white:not(.audio-player-wrapper *),
+.chant-container .bg-light:not(.audio-player-wrapper *),
+.aelf-content-card .bg-white,
+.aelf-content-card .bg-light,
+.aelf-content {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    position: relative;
+    z-index: 0;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chant-container .card.pdf-active {
+    width: 100% !important;
+}
+
+/* Subtle hover lift for linked cards */
+.chant-container a.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chant-container a.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+}
+
+.liturgical-header {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    z-index: 1020;
+    margin-inline: -0.75rem;
+    padding-inline: 0.75rem;
+}
+
+.liturgical-color-dot {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    flex: 0 0 0.75rem;
+    border: 1px solid rgba(33, 37, 41, 0.28);
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.liturgical-color-dot-sm {
+    width: 0.625rem;
+    height: 0.625rem;
+    flex-basis: 0.625rem;
+    margin-right: 0.25rem;
+}
+
+@media (min-width: 768px) {
+    .liturgical-header { margin-inline: -1rem; padding-inline: 1rem; }
+}
+
+@media (min-width: 992px) {
+    .liturgical-header { margin-inline: -1.5rem; padding-inline: 1.5rem; }
+}
+
+.chant-container .card:not(.audio-player-wrapper)::before,
+.aelf-content-card::before,
+.liturgical-header::before,
+.chant-container .bg-white:not(.audio-player-wrapper *)::before,
+.chant-container .bg-light:not(.audio-player-wrapper *)::before,
+.aelf-content-card .bg-white::before,
+.aelf-content-card .bg-light::before,
+.aelf-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.listing-page .card,
+.listing-card {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    position: relative;
+    z-index: 0;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+.listing-page .card::before,
+.listing-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.content-block-gap {
+    margin-bottom: 2rem;
+}
+
+.aelf-content {
+    padding: 0;
+}
+
+/* Éviter l'empilement de transparence et de bordures */
+.card .aelf-content-card,
+.card .bg-white,
+.card .bg-light,
+.card .aelf-content {
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    border: none !important;
+}
+
+.card .aelf-content-card::before,
+.card .bg-white::before,
+.card .bg-light::before,
+.card .aelf-content::before {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    body {
+        padding-top: 0 !important;
+    }
+}

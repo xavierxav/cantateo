@@ -1,0 +1,117 @@
+{% load static %}
+{% comment %}
+  PDF Viewer component.
+  Variables: partition
+{% endcomment %}
+<div class="mb-4">
+    <div class="d-flex gap-2 align-items-center flex-wrap mb-3">
+        {% if partition.partition_pdf %}
+            {% if not hide_pdf_toggle %}
+                <button type="button"
+                        class="btn btn-sm btn-primary"
+                        id="pdf-toggle-btn-{{ partition.id }}"
+                        aria-controls="pdf-viewer-{{ partition.id }}"
+                        aria-expanded="false"
+                        aria-label="Afficher la partition"
+                        data-pdf-action="toggle"
+                        data-viewer-id="pdf-viewer-{{ partition.id }}"
+                        data-pdf-url="{% url 'download_pdf' partition.id %}?inline=true">
+                    <svg width="18"
+                         height="18"
+                         viewBox="0 0 24 24"
+                         fill="currentColor"
+                         style="vertical-align: middle;
+                                margin-right: 8px">
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                    </svg>
+                    <span class="btn-text">Afficher partition</span>
+                </button>
+            {% endif %}
+            <a href="{% url 'download_pdf' partition.id %}"
+               class="btn btn-sm btn-outline-primary"
+               aria-label="Télécharger la partition">
+                <svg width="18"
+                     height="18"
+                     viewBox="0 0 24 24"
+                     fill="currentColor"
+                     style="vertical-align: middle;
+                            margin-right: 8px">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+                Télécharger partition
+            </a>
+        {% endif %}
+    </div>
+    {% if partition.partition_pdf %}
+        <!-- PDF Viewer avec PDF.js -->
+        <div id="pdf-viewer-{{ partition.id }}"
+             class="pdf-viewer-container"
+              style="display: none"
+             data-pdf-url="{% url 'download_pdf' partition.id %}?inline=true"
+             data-auto-open="true">
+            <div class="pdf-loading" id="pdf-loading-{{ partition.id }}">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-2 mb-0">Chargement de la partition...</p>
+            </div>
+            <div class="pdf-canvas-container"
+                 id="pdf-canvas-container-{{ partition.id }}">
+                <canvas id="pdf-canvas-{{ partition.id }}" class="pdf-canvas"></canvas>
+            </div>
+            <div class="pdf-controls"
+                 id="pdf-controls-{{ partition.id }}"
+                 style="display: none">
+                <div class="d-flex align-items-center gap-2 border-end pe-2 me-1">
+                    <button type="button"
+                            class="btn btn-sm btn-light border-0"
+                            data-pdf-action="zoom-out"
+                            data-chant-id="{{ partition.id }}"
+                            aria-label="Réduire le zoom"
+                            title="Zoom -">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 13H5v-2h14v2z" />
+                        </svg>
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm btn-light border-0"
+                            data-pdf-action="zoom-in"
+                            data-chant-id="{{ partition.id }}"
+                            aria-label="Agrandir le zoom"
+                            title="Zoom +">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="button"
+                            class="btn btn-sm btn-light border-0"
+                            data-pdf-action="prev"
+                            data-chant-id="{{ partition.id }}"
+                            id="pdf-prev-{{ partition.id }}"
+                            aria-label="Page précédente">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                        </svg>
+                    </button>
+                    <span class="mx-2 small fw-bold"
+                          style="min-width: 45px;
+                                 text-align: center">
+                        <span id="pdf-page-num-{{ partition.id }}">1</span> / <span id="pdf-page-count-{{ partition.id }}">1</span>
+                    </span>
+                    <button type="button"
+                            class="btn btn-sm btn-light border-0"
+                            data-pdf-action="next"
+                            data-chant-id="{{ partition.id }}"
+                            id="pdf-next-{{ partition.id }}"
+                            aria-label="Page suivante">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

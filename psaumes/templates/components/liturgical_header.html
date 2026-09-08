@@ -1,0 +1,88 @@
+{% load liturgical_tags %}
+{% comment %}
+Component for the sticky liturgical header with date navigation and chant title.
+Variables: partition, psaume, aelf_psalm, aelf_info, moment_liturgique, date
+{% endcomment %}
+<div class="sticky-top liturgical-header bg-white py-2 mb-3 border-bottom shadow-sm">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-2">
+        <div class="flex-grow-1">
+            <h1 class="h2 mb-0 fw-bold">
+                {% if partition %}
+                    {% if psaume.get_absolute_url and not hide_link %}
+                        <a href="{{ psaume.get_absolute_url }}"
+                           class="text-decoration-none text-dark">{{ partition.titre }}</a>
+                    {% else %}
+                        {{ partition.titre }}
+                    {% endif %}
+                {% elif psaume %}
+                    {{ psaume.nom_psaume }}
+                {% elif is_paques or is_noel or is_saint_sacrement or is_trinite %}
+                    Psaumes du jour
+                {% else %}
+                    Psaume du jour
+                {% endif %}
+            </h1>
+            {% if not is_paques and not is_noel and not is_saint_sacrement and not is_trinite %}
+                {% if aelf_psalm and not partition %}
+                    <div class="h5 mb-0 text-danger fw-bold">Pas encore de partition pour le psaume du jour</div>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if not hide_date_nav %}
+            <div class="d-flex align-items-center gap-2 flex-wrap"
+                 hx-target="#psaume-details"
+                 hx-select="#psaume-details"
+                 hx-swap="outerHTML"
+                 hx-push-url="true">
+                <button type="button"
+                        id="btn-next-sunday"
+                        class="btn btn-primary px-3 shadow-sm"
+                        data-action="next-sunday">
+                    Dimanche
+                    prochain
+                </button>
+                <div class="position-relative">
+                    <button type="button"
+                            id="btn-autres-dates"
+                            class="btn btn-outline-secondary px-3 shadow-sm">
+                        Autres
+                        dates
+                    </button>
+                    <input id="jump-date"
+                           name="date"
+                           type="date"
+                           class="position-absolute opacity-0"
+                           style="bottom:0;
+                                  left:0;
+                                  width:100%;
+                                  height:100%;
+                                  pointer-events:none"
+                           value="{{ date|default:'' }}"
+                           hx-get="{% url 'index' %}"
+                           hx-trigger="change" />
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    {% if partition or aelf_info or moment_liturgique or psaume %}
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            {% if not is_paques and not is_noel and not is_saint_sacrement and not is_trinite %}
+                {% if psaume.nom_psaume %}
+                    {% if psaume.psaume_or_cantique == 'psaume' %}
+                        <span class="badge bg-primary">{{ psaume.nom_psaume }}</span>
+                    {% else %}
+                        <span class="badge bg-info">{{ psaume.nom_psaume }}</span>
+                    {% endif %}
+                {% endif %}
+                {% if partition.compositeur %}
+                    <span class="badge bg-secondary d-none d-md-inline-block">{{ partition.compositeur }}</span>
+                {% endif %}
+            {% endif %}
+            {% if aelf_info %}
+                {% include 'components/liturgical_indicators.html' with aelf_info=aelf_info %}
+            {% elif moment_liturgique %}
+                <span class="text-muted small">{{ moment_liturgique }}</span>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

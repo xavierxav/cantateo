@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Histoire - Cantateo{% endblock %}
+{% block meta_description %}Découvrez l'histoire de Cantateo : un groupe de familles et jeunes de Rambouillet engagés dans la musique liturgique et les spectacles de saints.{% endblock %}
+{% block meta_keywords %}Cantateo, histoire, groupe musical, liturgie, spectacle, saints{% endblock %}
+{% block social_meta %}
+    <meta property="og:title" content="Histoire - Cantateo">
+    <meta property="og:description"
+          content="Cantateo : un groupe de familles et jeunes engagés dans la musique liturgique et les spectacles de saints depuis 2007.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ site_url }}{{ request.path }}">
+<meta property="og:image"
+      content="{{ site_url }}{% static 'icons/icon-512.png' %}">
+    <meta name="twitter:title" content="Histoire - Cantateo">
+    <meta name="twitter:description"
+          content="Découvrez le groupe Cantateo et sa mission musicale et spirituelle.">
+    <meta name="twitter:card" content="summary">
+{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+            <div class="card mb-4 shadow-lg">
+                <div class="card-body">
+                    <h1 class="mb-4 text-center">Histoire de Cantateo</h1>
+                    <p class="fs-5 text-secondary">
+                        Cantateo est formé de familles, de jeunes, d'enfants, principalement de Rambouillet et de ses environs.
+                    </p>
+                    <p>
+                        Le groupe est né in 2007 à l'initiative de la paroisse Ste Elisabeth de Hongrie, à Paris, qui fêtait cette année-là le 800ème anniversaire de sa sainte patronne. Ce premier spectacle mettait donc en scène et en musique la vie de cette grande sainte méconnue en France. Il fut joué 9 fois, la dernière durant une session à Paray-le-Monial devant 3000 personnes.
+                    </p>
+                    <p>
+                        Cette première expérience a été suivie d'autres spectacles illustrant la vie de Ste Geneviève, du Curé dArs, de Thérèse d'Avila et Jean de la Croix (présenté aux JMJ de Madrid), Charles de Foucault et Saint-Louis. En présentant ces vies de saints, enluminées par la musique originale et par des textes souvent extraits de la Bible ou des écrits des saints eux-mêmes, nous voulons apporter la joie et la miséricorde de Dieu à un très large public, dans une ambiance de prière.
+                    </p>
+                    <p>
+                        L'entrée des spectacles est gratuite, avec libre participation aux frais et vente de CD. Les bénéfices sont reversés à diverses associations caritatives, comme par exemple l'œuvre d'Orient pour la plupart des représentations de St Louis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

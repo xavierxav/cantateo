@@ -1,0 +1,107 @@
+name: Deploy beta
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+env:
+  BETA_BRANCH: beta-catalogue
+  BETA_APP_DIR: /var/www/cantateo-beta
+
+jobs:
+  deploy:
+    name: Deploy beta.cantateo.fr
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out beta branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BETA_BRANCH }}
+          fetch-depth: 1
+
+      - name: Resolve beta commit
+        id: beta
+        run: |
+          set -euo pipefail
+          sha="$(git rev-parse HEAD)"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "Deploy target: ${BETA_BRANCH}@${sha}"
+
+      - name: Require successful CI for beta commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.beta.outputs.sha }}
+        run: |
+          set -euo pipefail
+
+          run_id="$(
+            gh run list \
+              --workflow "CI" \
+              --json databaseId,event,headBranch,headSha \
+              --limit 50 \
+              --jq ".[] | select(.event == \"push\" and .headBranch == \"${BETA_BRANCH}\" and .headSha == \"${SHA}\") | .databaseId" \
+              | head -n 1
+          )"
+
+          if [ -z "$run_id" ]; then
+            echo "No CI push run found for ${BETA_BRANCH}@${SHA}."
+            echo "Latest CI runs:"
+            gh run list \
+              --workflow "CI" \
+              --json status,conclusion,event,headBranch,headSha,url \
+              --limit 10 \
+              --template '{{range .}}{{printf "- %s / %s / %s / %s / %s: %s\n" .status .conclusion .event .headBranch .headSha .url}}{{end}}'
+            exit 1
+          fi
+
+          run_status="$(gh run view "$run_id" --json status --jq .status)"
+          if [ "$run_status" != "completed" ]; then
+            echo "Waiting for CI run $run_id to finish..."
+            gh run watch "$run_id" --interval 30
+          fi
+
+          conclusion="$(gh run view "$run_id" --json conclusion --jq .conclusion)"
+          run_url="$(gh run view "$run_id" --json url --jq .url)"
+          if [ "$conclusion" != "success" ]; then
+            echo "CI gate failed for ${BETA_BRANCH}@${SHA}: ${conclusion}"
+            echo "$run_url"
+            exit 1
+          fi
+
+          echo "CI gate passed: $run_url"
+
+      - name: Configure SSH
+        env:
+          HETZNER_KNOWN_HOSTS: ${{ secrets.HETZNER_KNOWN_HOSTS }}
+          HETZNER_SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$HETZNER_KNOWN_HOSTS"
+          test -n "$HETZNER_SSH_PRIVATE_KEY"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$HETZNER_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          printf '%s\n' "$HETZNER_SSH_PRIVATE_KEY" > ~/.ssh/hetzner
+          chmod 600 ~/.ssh/known_hosts ~/.ssh/hetzner
+
+      - name: Deploy beta on Hetzner
+        env:
+          HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+          HETZNER_SSH_USER: ${{ secrets.HETZNER_SSH_USER }}
+        run: |
+          set -euo pipefail
+          test -n "$HETZNER_HOST"
+          test -n "$HETZNER_SSH_USER"
+
+          ssh \
+            -i ~/.ssh/hetzner \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=~/.ssh/known_hosts \
+            "${HETZNER_SSH_USER}@${HETZNER_HOST}" \
+            "APP_DIR='${BETA_APP_DIR}' BRANCH='${BETA_BRANCH}' bash '${BETA_APP_DIR}/deploy/deploy-beta.sh'"

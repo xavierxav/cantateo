@@ -1,0 +1,323 @@
+{% load static %}
+{% comment %}
+Multi-track audio player component.
+Variables: partition, has_non_synthetic_audio
+{% endcomment %}
+<div class="audio-player-wrapper shadow-sm"
+     id="draggable-player-{{ partition.id }}"
+     data-partition-id="{{ partition.id }}"
+     data-has-mxl="{% if partition.partition_mxl %}true{% else %}false{% endif %}"
+     data-has-non-synthetic="{% if has_non_synthetic_audio %}true{% else %}false{% endif %}"
+     data-audio-count="{% if partition.is_mix_only %}1{% else %}{{ partition.audio_count }}{% endif %}"
+     data-mix-only="{% if partition.is_mix_only %}true{% else %}false{% endif %}">
+    <div id="audio-unsupported-{{ partition.id }}"
+         class="alert alert-warning py-2 px-3 small mb-0 d-none rounded-0 border-0"
+         role="status">
+        La lecture interactive n'est pas disponible dans ce navigateur. Les téléchargements restent disponibles.
+    </div>
+    <!-- Audio source registry (no media elements — avoids browser auto-buffering and Safari MediaElementSource glitches) -->
+    <div id="audio-container-{{ partition.id }}" style="display: none;">
+        {% for audio in partition.get_audio_list %}
+            {% if audio.voice_type != 'M' or partition.is_mix_only %}
+                <div id="audio-{{ audio.id }}"
+                     data-src="{{ audio.url }}"
+                     data-voice-type="{{ audio.voice_type }}"></div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!-- Drag Handle and Top Actions -->
+    <div class="audio-player-header d-flex align-items-center p-2 border-bottom rounded-top position-relative"
+         title="Déplacer">
+        <div class="flex-grow-1 pe-5">
+            <small class="text-muted fw-bold"
+                   style="font-size: 0.7rem;
+                          letter-spacing: 0.05rem;
+                          text-transform: uppercase">Lecteur Audio</small>
+        </div>
+        <div class="audio-top-actions position-absolute top-50 translate-middle-y end-0 me-2"
+             style="z-index: 10">
+            {% for audio in partition.get_audio_list %}
+                {% if audio.voice_type == 'M' %}
+                    <a id="mix-download-btn-{{ partition.id }}"
+                       href="{{ audio.download_url }}"
+                       download
+                       class="btn btn-sm btn-primary p-2 shadow-sm d-flex align-items-center justify-content-center"
+                       aria-label="Télécharger le mix"
+                       title="Télécharger MP3"
+                       style="width: 34px;
+                              height: 34px">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                        </svg>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="audio-player-body p-3">
+        <!-- Synthesis Loading indicator -->
+        {% if partition.partition_mxl and not has_non_synthetic_audio %}
+            {% with audios=partition.get_audio_list %}
+                {% if not audios %}
+                    <div class="mb-3" id="audio-loading-section-{{ partition.id }}">
+                        <div id="loading-spinner-{{ partition.id }}"
+                             class="alert alert-info py-2 px-3 d-flex align-items-center mb-0"
+                             role="alert">
+                            <div class="spinner-border spinner-border-sm text-info me-2" role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                            <div class="small">
+                                <strong>Synthèse en cours...</strong>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+        {% with audios=partition.get_audio_list %}
+            {% if audios or partition.partition_mxl %}
+                <div id="audio-player-section-{{ partition.id }}"
+                     {% if not audios %}style="display: none;"{% endif %}>
+                    <!-- Main player control -->
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <button type="button"
+                                id="play-pause-btn-{{ partition.id }}"
+                                class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
+                                data-audio-action="play-pause"
+                                data-chant-id="{{ partition.id }}"
+                                aria-label="Lire l'audio"
+                                aria-pressed="false"
+                                style="width: 44px;
+                                       height: 44px;
+                                       padding: 0;
+                                       flex-shrink: 0">
+                            <svg id="play-icon-{{ partition.id }}"
+                                 width="28"
+                                 height="28"
+                                 viewBox="0 0 24 24"
+                                 fill="currentColor">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                            <svg id="pause-icon-{{ partition.id }}"
+                                 width="28"
+                                 height="28"
+                                 viewBox="0 0 24 24"
+                                 fill="currentColor"
+                                 style="display: none">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                            </svg>
+                            <div id="play-spinner-{{ partition.id }}" 
+                                 class="spinner-border text-light" 
+                                 style="display: none; width: 1.5rem; height: 1.5rem; border-width: 0.15em;" 
+                                 role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                        </button>
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted small" id="current-time-{{ partition.id }}">0:00</span>
+                                <input type="range"
+                                       class="form-range playback-slider flex-grow-1"
+                                       min="0"
+                                       max="100"
+                                       value="0"
+                                       id="progress-bar-{{ partition.id }}"
+                                       aria-label="Position de lecture"
+                                       aria-valuemin="0"
+                                       aria-valuemax="100"
+                                       aria-valuenow="0"
+                                       aria-valuetext="0 pour cent"
+                                       data-audio-action="seek"
+                                       data-chant-id="{{ partition.id }}"
+                                       style="cursor: pointer;
+                                              height: 4px">
+                                <span class="text-muted small" id="duration-{{ partition.id }}">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Toggle for advanced -->
+                    <div class="text-center">
+                        <button type="button"
+                                id="advanced-toggle-{{ partition.id }}"
+                                class="btn btn-sm btn-outline-secondary px-3"
+                                data-audio-action="advanced-toggle"
+                                data-chant-id="{{ partition.id }}"
+                                aria-expanded="false"
+                                aria-controls="advanced-audio-{{ partition.id }}"
+                                aria-label="Afficher les options avancées"
+                                style="font-size: 0.8rem">Options avancées vitesse et voix ▾</button>
+                    </div>
+                    <div id="advanced-audio-{{ partition.id }}"
+                         class="mt-2 pt-2 border-top"
+                         style="display: none">
+                        <!-- Legend -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3 px-1 border-bottom pb-2">
+                            <div class="player-legend">
+                                <div class="legend-item">
+                                    <span class="legend-s">S</span> Solo
+                                </div>
+                                <span class="text-muted opacity-50">|</span>
+                                <div class="legend-item">
+                                    <svg width="14"
+                                         height="14"
+                                         viewBox="0 0 24 24"
+                                         fill="currentColor"
+                                         class="text-muted">
+                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                                    </svg>
+                                    Muet
+                                </div>
+                                <span class="text-muted opacity-50">|</span>
+                                <div class="legend-item">
+                                    <span class="legend-curseur">Curseur</span> Volume
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3" id="voice-controls-{{ partition.id }}">
+                            {% for audio in partition.get_audio_list %}
+                                {% if audio.voice_type != 'M' or partition.is_mix_only %}
+                                    <div class="col-6 voice-control-wrapper"
+                                         data-voice-type="{{ audio.voice_type }}"
+                                         data-audio-id="{{ audio.id }}"
+                                         data-voice-label="{{ audio.label }}">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center justify-content-between mb-1 px-1">
+                                                <small class="text-muted fw-bold" style="font-size: 0.75rem;">
+                                                    {{ audio.label }}
+                                                    {% if audio.est_synthetique %}
+                                                        <span class="synth-label" style="font-size: 0.6rem; opacity: 0.7;">(synth.)</span>
+                                                    {% endif %}
+                                                </small>
+                                                <a href="{{ audio.download_url }}"
+                                                   download
+                                                   class="text-muted"
+                                                   aria-label="Télécharger {{ audio.label }}"
+                                                   title="Télécharger {{ audio.label }}">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-1">
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-warning border-0 p-0 solo-btn"
+                                                        id="solo-btn-{{ audio.id }}"
+                                                        data-audio-action="solo"
+                                                        data-audio-id="{{ audio.id }}"
+                                                        aria-label="Mettre en solo {{ audio.label }}"
+                                                        aria-pressed="false"
+                                                        title="Solo">S</button>
+                                                <div class="volume-control-group flex-grow-1">
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-outline-secondary border-0 p-0 mute-btn"
+                                                            id="mute-btn-{{ audio.id }}"
+                                                            data-audio-action="mute"
+                                                            data-audio-id="{{ audio.id }}"
+                                                            aria-label="Couper le son de {{ audio.label }}"
+                                                            aria-pressed="false"
+                                                            title="Mute">
+                                                        <svg width="14"
+                                                             height="14"
+                                                             viewBox="0 0 24 24"
+                                                             fill="currentColor"
+                                                             id="volume-icon-{{ audio.id }}">
+                                                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                                                        </svg>
+                                                    </button>
+                                                    <input type="range"
+                                                           class="form-range volume-slider"
+                                                           min="0"
+                                                           max="100"
+                                                           value="100"
+                                                           id="volume-slider-{{ audio.id }}"
+                                                           aria-label="Volume de {{ audio.label }}"
+                                                           data-audio-action="volume"
+                                                           data-audio-id="{{ audio.id }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <!-- Speed Control at the bottom -->
+                        <div class="d-flex align-items-center justify-content-center pt-3 border-top mt-1">
+                            <div class="d-flex flex-column align-items-center gap-2">
+                                <small class="text-muted fw-bold"
+                                       style="font-size: 0.7rem;
+                                              text-transform: uppercase;
+                                              white-space: nowrap">Vitesse de
+                                lecture</small>
+                                <div id="speed-slider-shell-{{ partition.id }}"
+                                     class="d-flex align-items-center bg-light px-3 py-1 rounded-pill border"
+                                     style="height: 38px">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-primary fw-bold small"
+                                              style="min-width: 35px"
+                                              id="speed-display-{{ partition.id }}">1.0x</span>
+                                        <input type="range"
+                                               id="speed-slider-{{ partition.id }}"
+                                               class="volume-slider"
+                                               style="max-width: 120px"
+                                               min="0.4"
+                                               max="2.0"
+                                               step="0.1"
+                                               value="1.0"
+                                               aria-label="Vitesse de lecture"
+                                               aria-valuemin="0.4"
+                                               aria-valuemax="2.0"
+                                               aria-valuenow="1.0"
+                                               aria-valuetext="1,0 fois"
+                                               data-audio-action="speed"
+                                               data-chant-id="{{ partition.id }}">
+                                    </div>
+                                </div>
+                                <div id="apple-speed-controls-{{ partition.id }}"
+                                     class="d-none btn-group btn-group-sm"
+                                     role="group"
+                                     aria-label="Vitesse de lecture">
+                                    <button type="button"
+                                            class="btn btn-outline-primary apple-speed-btn"
+                                            style="min-width: 4.5rem"
+                                            data-audio-action="speed"
+                                            data-speed-value="0.5"
+                                            data-chant-id="{{ partition.id }}"
+                                            aria-pressed="false">0.5x</button>
+                                    <button type="button"
+                                            class="btn btn-outline-primary apple-speed-btn"
+                                            style="min-width: 4.5rem"
+                                            data-audio-action="speed"
+                                            data-speed-value="1.0"
+                                            data-chant-id="{{ partition.id }}"
+                                            aria-pressed="false">1.0x</button>
+                                    <button type="button"
+                                            class="btn btn-outline-primary apple-speed-btn"
+                                            style="min-width: 4.5rem"
+                                            data-audio-action="speed"
+                                            data-speed-value="1.5"
+                                            data-chant-id="{{ partition.id }}"
+                                            aria-pressed="false">1.5x</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tempo-status-{{ partition.id }}"
+                             class="text-center small text-muted mt-2"
+                             role="status"
+                             aria-live="polite"></div>
+                        <!-- Close button at the bottom of panel -->
+                        <div class="text-center mt-3">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-secondary px-3"
+                                    data-audio-action="advanced-toggle"
+                                    data-chant-id="{{ partition.id }}"
+                                    aria-expanded="true"
+                                    aria-controls="advanced-audio-{{ partition.id }}"
+                                    aria-label="Masquer les options avancées"
+                                    style="font-size: 0.8rem">Masquer options avancées▴</button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>

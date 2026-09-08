@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load liturgical_tags %}
+{% block title %}{{ ordinaire.titre }} — Cantateo{% endblock %}
+{% block meta_description %}Ordinaire de messe « {{ ordinaire.titre }} »{% if ordinaire.compositeur %} par {{ ordinaire.compositeur }}{% endif %} : Kyrie, Gloria, Sanctus, Agnus Dei avec partitions PDF et pistes audio mp3 à 4 voix.{% endblock %}
+{% block meta_keywords %}{{ ordinaire.titre }}, ordinaire de messe, Kyrie, Gloria, Sanctus, Agnus Dei, partition PDF, audio MP3, SATB, liturgie, catholique{% endblock %}
+{% block canonical_url %}{{ site_url }}{{ ordinaire.get_absolute_url }}{% endblock %}
+{% block social_meta %}{% include 'partials/_seo_meta_ordinaire.html' %}{% endblock %}
+{% block extra_meta %}<meta name="robots" content="index, follow">{% endblock %}
+{% block structured_data %}
+    {% for item in structured_data %}
+    <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{{ item|json_ld }}
+    </script>
+    {% endfor %}
+{% endblock %}
+{% block content %}
+    <div class="chant-container">
+        <div class="row justify-content-center content-block-gap">
+            <div class="col-lg-10 col-md-12">
+                <div class="card mb-4 shadow-lg w-100">
+                    <div class="card-body py-4">
+                        <p class="text-muted small mb-2">
+                            <a href="{% url 'ordinaire_list' %}" class="text-decoration-none">
+                                <i class="bi bi-arrow-left me-1"></i>Ordinaires de messe
+                            </a>
+                        </p>
+                        <h1 class="h2 mb-1 fw-bold">{{ ordinaire.titre }}</h1>
+                        {% if ordinaire.compositeur %}
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-person-fill me-1"></i>{{ ordinaire.compositeur }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if partitions %}
+                    <div class="card shadow-sm w-100">
+                        <div class="list-group list-group-flush">
+                            {% for partition in partitions %}
+                                <a href="{% url 'ordinaire_partie_detail' pk=ordinaire.pk slug=ordinaire.slug partie=partition.partie_slug %}"
+                                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-decoration-none text-reset py-3 px-4">
+                                    <span class="h5 mb-0 fw-bold mx-auto">{{ partition.get_partie_messe_display }}</span>
+                                    <i class="bi bi-chevron-right text-primary"></i>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center"><p class="mb-0">Aucune partie de messe disponible pour cet ordinaire pour l'instant.</p></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

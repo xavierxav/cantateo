@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Confidentialité - Cantateo{% endblock %}
+{% block meta_description %}Politique de confidentialité de Cantateo : formulaire de contact, protection anti-bot, statistiques techniques et stockage local.{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <article class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h2 mb-4">Confidentialité</h1>
+                    <p>
+                        Cantateo collecte uniquement les informations nécessaires au fonctionnement du site :
+                        les messages envoyés depuis le formulaire de contact, les journaux techniques du serveur,
+                        et les préférences locales comme la fermeture d'une bannière d'information.
+                    </p>
+                    <h2 class="h5 mt-4">Formulaire de contact</h2>
+                    <p>
+                        Le nom, l'adresse email et le message servent uniquement à répondre à la demande.
+                        Le formulaire utilise Cloudflare Turnstile pour limiter les envois automatisés.
+                    </p>
+                    <h2 class="h5 mt-4">Stockage local</h2>
+                    <p>
+                        Le navigateur peut conserver un identifiant local indiquant qu'une bannière a été fermée.
+                        Cette donnée reste sur l'appareil et peut être supprimée depuis les réglages du navigateur.
+                    </p>
+                    <h2 class="h5 mt-4">Médias et services techniques</h2>
+                    <p>
+                        Les partitions PDF et fichiers audio peuvent être servis depuis Cloudflare R2.
+                        Les erreurs applicatives peuvent être transmises à Sentry si ce service est activé en production.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </div>
+{% endblock %}

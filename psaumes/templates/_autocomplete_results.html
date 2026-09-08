@@ -1,0 +1,40 @@
+{% if results %}
+    <ul class="list-group autocomplete-results"
+        role="listbox"
+        aria-label="Suggestions de recherche">
+        {% for result in results %}
+            <li class="list-group-item list-group-item-action p-0" role="none">
+                <a href="{{ result.url }}"
+                   id="autocomplete-option-{{ forloop.counter0 }}"
+                   class="autocomplete-option text-decoration-none d-block p-2"
+                   role="option"
+                   aria-selected="false"
+                   tabindex="-1"
+                   data-autocomplete-option="true">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong class="text-dark">{{ result.title }}</strong>
+                            {% if result.subtitle %}
+                                <small class="d-block text-muted text-truncate" style="max-width: 280px;">{{ result.subtitle }}</small>
+                            {% endif %}
+                        </div>
+                        <span class="badge ms-2 {% if result.type == 'psaume' %}bg-primary{% elif result.type == 'moment' %}bg-purple{% elif result.type == 'ordinaire' %}bg-success{% else %}bg-info{% endif %}"
+                              {% if result.type == 'moment' %}style="background-color: #6f42c1;"{% endif %}>
+                            {% if result.type == 'moment' %}
+                                Liturgie
+                            {% elif result.type == 'ordinaire' %}
+                                Messe
+                            {% else %}
+                                {{ result.type|title }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% elif query %}
+    <div class="p-3 text-muted text-center bg-white border rounded"
+         role="status"
+         aria-live="polite">Aucun résultat pour "{{ query }}"</div>
+{% endif %}

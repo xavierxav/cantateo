@@ -1,0 +1,13 @@
+/* Date picker styles - minimal overrides for the native date input */
+
+/* Ensure date input has consistent styling */
+input[type="date"].form-control-sm {
+  min-width: 150px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

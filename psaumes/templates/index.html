@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load liturgical_tags %}
+{% block title %}Psaume du jour — Cantateo{% endblock %}
+{% block meta_description %}Psaume du jour et du dimanche en français : partition et audios mp3 gratuits, chorale à 4 voix pour la messe. Chantez et priez avec Cantateo.{% endblock %}
+{% block og_description %}Psaume du jour et du dimanche en français : partition et audios mp3 gratuits, chorale à 4 voix pour la messe. Chantez et priez avec Cantateo.{% endblock %}
+{% block twitter_description %}Partition et audios mp3 gratuits pour chanter le psaume du jour à la messe.{% endblock %}
+
+{% block meta_keywords %}psaume du jour, psaume du dimanche, psaume dominical, partition psaume, chant liturgique, messe, liturgie, cantique, catholique, chorale, musique d'église, prier, animation liturgique{% endblock %}
+
+{% block extra_meta %}
+    {% if request.GET.date %}
+        <!-- Date-specific pages should not be indexed - use canonical psaume pages instead -->
+        <meta name="robots" content="noindex, follow">
+    {% endif %}
+{% endblock %}
+{% block meta %}{% endblock %}
+{% block structured_data %}
+    {% for item in structured_data %}
+        <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{{ item|json_ld }}
+        </script>
+    {% endfor %}
+{% endblock %}
+{% block content %}
+    <div id="psaume-main">
+        <div id="psaume-details"
+             data-has-chant="{% if partition %}true{% else %}false{% endif %}">
+            {% include 'components/liturgical_header.html' %}
+            {% if is_samedi_saint %}
+                {% include 'components/holy_saturday_special.html' with date_paques=date_paques %}
+            {% elif is_paques %}
+                {% include "components/easter_sunday_special.html" %}
+            {% elif is_noel %}
+                {% include "components/christmas_special.html" %}
+            {% elif is_saint_sacrement %}
+                {% include "components/fete_sequence_special.html" with fete_title="Saint-Sacrement du Corps et du Sang du Christ" fete_moments=saint_sacrement_moments %}
+            {% elif is_trinite %}
+                {% include "components/fete_sequence_special.html" with fete_title="Sainte Trinité" fete_moments=trinite_moments %}
+            {% elif partition or aelf_psalm %}
+                {% include "_psaume.html" with hide_header=True %}
+            {% else %}
+                <div class="alert alert-info text-center mt-3">
+                    <h5>Aucun chant disponible pour cette date</h5>
+                    <p class="mb-0">Nous n'avons pas encore de partition pour ce moment liturgique.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block extra_scripts %}
+    <script src="{% static 'js/calendar.js' %}?v=4"></script>
+{% endblock %}

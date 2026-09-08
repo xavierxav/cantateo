@@ -1,0 +1,86 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        .simplified-editor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .simplified-editor-card,
+        .simplified-editor-panel {
+            border: 1px solid var(--hairline-color);
+            border-radius: 4px;
+            padding: 1rem;
+            background: var(--body-bg);
+        }
+        .simplified-editor-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .simplified-editor-table {
+            width: 100%;
+        }
+        .simplified-editor-table th,
+        .simplified-editor-table td {
+            padding: 0.5rem;
+            vertical-align: top;
+        }
+        .simplified-editor-help {
+            color: var(--body-quiet-color);
+        }
+        .simplified-editor-error {
+            color: var(--error-fg);
+        }
+        .simplified-editor-search {
+            margin: 0.5rem 0 0.75rem;
+            max-width: 42rem;
+            width: 100%;
+        }
+        .simplified-moment-picker {
+            max-height: 22rem;
+            overflow: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem;
+            background: var(--body-bg);
+        }
+        .simplified-moment-picker ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .simplified-moment-picker li {
+            margin: 0;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid var(--hairline-color);
+        }
+        .simplified-moment-picker li:last-child {
+            border-bottom: 0;
+        }
+        .simplified-moment-picker label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .simplified-moment-picker input[type="checkbox"] {
+            margin-top: 0.2rem;
+        }
+        .simplified-moment-picker [hidden] {
+            display: none !important;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Admin</a>
+        &rsaquo; <a href="{% url 'simplified_dashboard' %}">Saisie simplifiée</a>
+        {% block editor_breadcrumbs %}{% endblock %}
+    </div>
+{% endblock %}

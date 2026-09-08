@@ -1,0 +1,21 @@
+{% extends "editor/base.html" %}
+
+{% block editor_breadcrumbs %} &rsaquo; Nouvelle partition &rsaquo; Terminé{% endblock %}
+
+{% block content %}
+    <h1>Partition enregistrée</h1>
+    <p>{{ partition.psaume }} - {{ partition.titre }}</p>
+    {% if partition.omr_job %}
+        <p class="simplified-editor-help">
+            Reconnaissance OMR : {{ partition.omr_job.get_status_display }}
+            {% if partition.omr_job.last_error %}- {{ partition.omr_job.last_error }}{% endif %}
+        </p>
+    {% endif %}
+    <div class="simplified-editor-actions">
+        <a class="button" href="{% url 'simplified_partition_moments' %}">Ajouter une autre partition</a>
+        {% if partition.psaume %}
+            <a class="button" href="{{ partition.psaume.get_absolute_url }}">Voir sur le site</a>
+        {% endif %}
+        <a class="button" href="{% url 'simplified_dashboard' %}">Retour à la saisie simplifiée</a>
+    </div>
+{% endblock %}

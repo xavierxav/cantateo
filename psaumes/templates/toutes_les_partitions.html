@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Toutes les partitions — Cantateo{% endblock %}
+{% block meta_description %}Liste complète de toutes les partitions de psaumes et cantiques disponibles sur Cantateo, avec compositeurs et moments liturgiques.{% endblock %}
+{% block content %}
+<div class="listing-page">
+<div class="container">
+    <div class="card shadow-sm p-3 mb-4 text-center">
+        <h1 class="h3 mb-2">Toutes les partitions</h1>
+        <a href="{% url 'calendrier_liturgique' %}"
+           class="text-decoration-none">Voir par calendrier liturgique &rarr;</a>
+    </div>
+
+    {% if cantiques %}
+    <div class="card shadow-sm p-3 mb-4">
+        <h2 class="h4 mb-3">Cantiques</h2>
+        <div class="list-group list-group-flush">
+            {% for psaume in cantiques %}
+                {% for partition in psaume.partitions.all %}
+                <a href="{{ psaume.get_absolute_url }}"
+                   class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>{{ psaume.nom_psaume }}</strong>
+                            {% if partition.titre %} &mdash; {{ partition.titre }}{% endif %}
+                        </span>
+                        <span class="text-muted small">
+                            {% if partition.compositeur %}{{ partition.compositeur }}{% endif %}
+                            {% if psaume.moments_liturgiques.all %}
+                                &middot; {% for m in psaume.moments_liturgiques.all %}{{ m }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                </a>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm p-3 mb-4">
+        <h2 class="h4 mb-3">Psaumes</h2>
+        <div class="list-group list-group-flush">
+            {% for psaume in psaumes %}
+                {% for partition in psaume.partitions.all %}
+                <a href="{{ psaume.get_absolute_url }}"
+                   class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>{{ psaume.nom_psaume }}</strong>
+                            {% if partition.titre %} &mdash; {{ partition.titre }}{% endif %}
+                        </span>
+                        <span class="text-muted small">
+                            {% if partition.compositeur %}{{ partition.compositeur }}{% endif %}
+                            {% if psaume.moments_liturgiques.all %}
+                                &middot; {% for m in psaume.moments_liturgiques.all %}{{ m }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                </a>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

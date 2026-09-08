@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Contact - Cantateo{% endblock %}
+{% block extra_head %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endblock %}
+{% block meta_description %}Contactez l'équipe de Cantateo. Une question, une suggestion sur nos psaumes et partitions ? N'hésitez pas à nous écrire.{% endblock %}
+{% block meta_keywords %}contact, cantateo, message, suggestion, question{% endblock %}
+{% block social_meta %}
+    <meta property="og:title" content="Contact - Cantateo">
+    <meta property="og:description"
+          content="Une question, une suggestion ? Contactez l'équipe de Cantateo.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ site_url }}{{ request.path }}">
+<meta property="og:image"
+      content="{{ site_url }}{% static 'icons/icon-512.png' %}">
+    <meta name="twitter:title" content="Contact - Cantateo">
+    <meta name="twitter:description"
+          content="Contactez l'équipe de Cantateo via notre formulaire en ligne.">
+    <meta name="twitter:card" content="summary">
+{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg mb-4 border-0">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-envelope-paper text-primary display-4 mb-3"></i>
+                        <h1 class="h2 mb-2">Contactez-nous</h1>
+                        <p class="text-muted">Une question, une suggestion ? N'hésitez pas à nous écrire.</p>
+                    </div>
+                    {% if sent %}
+                        <div class="alert alert-success d-flex align-items-center shadow-sm"
+                             role="alert">
+                            <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                            <div>Votre message a été envoyé avec succès. Merci !</div>
+                        </div>
+                    {% else %}
+                        {% if error %}
+                            <div class="alert alert-danger d-flex align-items-center shadow-sm"
+                                 role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                                <div>{{ error }}</div>
+                            </div>
+                        {% endif %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {# Honeypot anti-bot : caché pour les humains #}
+                            <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+                                {{ form.website }}
+                                <label for="{{ form.website.id_for_label }}">Ne pas remplir ce champ</label>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form.nom }}
+                                        <label for="{{ form.nom.id_for_label }}">Nom complet</label>
+                                        {% if form.nom.errors %}<div class="text-danger small mt-1">{{ form.nom.errors|join:", " }}</div>{% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form.email }}
+                                        <label for="{{ form.email.id_for_label }}">Adresse email</label>
+                                        {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors|join:", " }}</div>{% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating mb-4">
+                                        {{ form.message }}
+                                        <label for="{{ form.message.id_for_label }}">Votre message</label>
+                                        {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors|join:", " }}</div>{% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">
+                                    {% if turnstile_site_key %}
+                                        <div class="cf-turnstile mb-3 d-inline-block"
+                                             data-sitekey="{{ turnstile_site_key }}"
+                                             data-theme="light"></div>
+                                    {% endif %}
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                                        <i class="bi bi-send me-2"></i>Envoyer le message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

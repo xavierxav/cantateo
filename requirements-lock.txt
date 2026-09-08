@@ -1,0 +1,25 @@
+# Direct dependency constraints generated from the reviewed virtualenv.
+# Use with: pip install -r requirements.txt -c requirements-lock.txt
+Django==5.2.9
+requests==2.32.5
+bleach==6.3.0
+python-dateutil==2.9.0.post0
+pytest==9.0.2
+pytest-django==4.11.1
+python-dotenv==1.2.1
+celery==5.6.3
+gunicorn==23.0.0
+psycopg2-binary==2.9.11
+whitenoise==6.11.0
+dj-database-url==3.0.1
+django-storages==1.14.6
+boto3==1.42.19
+sentry-sdk==2.58.0
+django-redis==6.0.0
+redis==7.1.0
+hiredis==3.3.0
+music21==9.9.1
+midi2audio==0.1.1
+pydub==0.25.1
+mutagen==1.47.0
+djlint==1.36.4

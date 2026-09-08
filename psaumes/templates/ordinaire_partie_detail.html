@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load liturgical_tags %}
+{% block title %}{{ partie_label }} — {{ ordinaire.titre }} — Cantateo{% endblock %}
+{% block meta_description %}{{ partie_label }} de la messe « {{ ordinaire.titre }} »{% if ordinaire.compositeur %} par {{ ordinaire.compositeur }}{% endif %} : partition PDF et pistes audio à 4 voix (SATB).{% endblock %}
+{% block meta_keywords %}{{ partie_label }}, {{ ordinaire.titre }}, ordinaire de messe, partition PDF, audio MP3, SATB, liturgie, catholique{% endblock %}
+{% block canonical_url %}{{ site_url }}{% url 'ordinaire_partie_detail' pk=ordinaire.pk slug=ordinaire.slug partie=partie_slug %}{% endblock %}
+{% block social_meta %}{% include 'partials/_seo_meta_ordinaire.html' %}{% endblock %}
+{% block extra_meta %}<meta name="robots" content="index, follow">{% endblock %}
+{% block structured_data %}
+    {% for item in structured_data %}
+    <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{{ item|json_ld }}
+    </script>
+    {% endfor %}
+{% endblock %}
+{% block content %}
+    <div class="chant-container">
+        <div class="card shadow-lg mb-4 w-100">
+            <div class="card-body py-3">
+                <p class="text-muted small mb-1">
+                    <a href="{% url 'ordinaire_list' %}" class="text-decoration-none">Ordinaires de messe</a>
+                    <span class="mx-1">›</span>
+                    <a href="{{ ordinaire.get_absolute_url }}" class="text-decoration-none">{{ ordinaire.titre }}</a>
+                </p>
+                <h1 class="h3 mb-1 fw-bold">{{ partie_label }}</h1>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <span class="badge bg-primary">{{ ordinaire.titre }}</span>
+                    {% if ordinaire.compositeur %}<span class="badge bg-secondary">{{ ordinaire.compositeur }}</span>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% for partition in partitions %}
+            {% if partition.has_audio or partition.partition_mxl %}
+                {% include 'components/audio_player.html' with partition=partition has_non_synthetic_audio=partition.has_non_synthetic_audio %}
+            {% endif %}
+            <div class="row g-4 content-block-gap justify-content-center">
+                <div class="col-12 col-lg-8 mx-auto">
+                    <div class="card shadow-lg h-100 mx-auto w-100">
+                        <div class="card-body">
+                            {% if partitions|length > 1 %}
+                                <h2 class="h5 mb-3 fw-bold">{{ partition.titre|default:partie_label }}</h2>
+                            {% endif %}
+                            {% if partition.partition_pdf %}
+                                <a href="{% url 'download_pdf' partition.id %}" class="btn btn-sm btn-outline-primary" aria-label="Télécharger la partition">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i>
+                                    Télécharger la partition
+                                </a>
+                            {% elif not partition.has_audio and not partition.partition_mxl %}
+                                <p class="text-muted mb-0"><i class="bi bi-hourglass-split me-1"></i>Partition à venir.</p>
+                            {% else %}
+                                <p class="text-muted small mb-0"><i class="bi bi-hourglass-split me-1"></i>Partition PDF à venir.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="row g-4 content-block-gap justify-content-center">
+            <div class="col-12 col-lg-8 mx-auto">
+                <div class="card shadow-sm w-100">
+                    <div class="card-body p-3">
+                        <nav class="d-flex justify-content-between align-items-center" aria-label="Navigation entre parties">
+                            <div>
+                                {% if prev_part %}
+                                    <a href="{% url 'ordinaire_partie_detail' pk=ordinaire.pk slug=ordinaire.slug partie=prev_part.slug %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-chevron-left me-1"></i>{{ prev_part.label }}
+                                    </a>
+                                {% else %}
+                                    <span class="btn btn-outline-secondary btn-sm disabled opacity-0">
+                                        <i class="bi bi-chevron-left me-1"></i>—
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if next_part %}
+                                    <a href="{% url 'ordinaire_partie_detail' pk=ordinaire.pk slug=ordinaire.slug partie=next_part.slug %}" class="btn btn-outline-secondary btn-sm">
+                                        {{ next_part.label }}<i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="btn btn-outline-secondary btn-sm disabled opacity-0">
+                                        —<i class="bi bi-chevron-right ms-1"></i>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

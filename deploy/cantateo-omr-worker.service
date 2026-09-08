@@ -1,0 +1,34 @@
+[Unit]
+Description=Cantateo OMR Celery Worker
+After=network.target postgresql.service redis.service cantateo.service
+Requires=redis.service
+
+[Service]
+User=cantateo
+Group=cantateo
+WorkingDirectory=/var/www/cantateo
+Environment="PATH=/var/www/cantateo/venv/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/var/www/cantateo/.env
+ExecStart=/var/www/cantateo/venv/bin/celery \
+    -A psalm_project worker \
+    --loglevel=info \
+    --queues=omr \
+    --concurrency=1 \
+    --prefetch-multiplier=1 \
+    --max-tasks-per-child=1 \
+    --hostname=omr@%H
+
+Restart=always
+RestartSec=5
+Nice=15
+CPUWeight=30
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/www/cantateo /var/log/cantateo /opt/omr
+
+[Install]
+WantedBy=multi-user.target

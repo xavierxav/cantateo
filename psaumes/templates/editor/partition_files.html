@@ -1,0 +1,24 @@
+{% extends "editor/base.html" %}
+
+{% block editor_breadcrumbs %} &rsaquo; Nouvelle partition &rsaquo; Fichiers{% endblock %}
+
+{% block content %}
+    <h1>Nouvelle partition - étape 2</h1>
+    <section class="simplified-editor-panel">
+        <h2>Moments sélectionnés</h2>
+        <ul>
+            {% for moment in moments %}
+                <li>{{ moment }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p class="simplified-editor-help">Le compositeur sera automatiquement Fonsalas. Le PDF est obligatoire.</p>
+        <div class="simplified-editor-actions">
+            <button type="submit" class="default">Enregistrer la partition</button>
+            <a class="button" href="{% url 'simplified_partition_moments' %}">Retour</a>
+        </div>
+    </form>
+{% endblock %}

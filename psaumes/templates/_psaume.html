@@ -1,0 +1,75 @@
+{% load liturgical_tags %}
+<div class="chant-container">
+    {% if not hide_header %}
+        {% include 'components/chant_header.html' with partition=partition psaume=psaume aelf_info=aelf_info moment_liturgique=moment_liturgique hide_link=hide_link hide_dropdown=hide_dropdown %}
+    {% endif %}
+    {% if partition %}
+        {% if partition.has_audio or partition.partition_mxl %}
+            {% include 'components/audio_player.html' with partition=partition has_non_synthetic_audio=has_non_synthetic_audio %}
+        {% endif %}
+        <div class="row g-4 content-block-gap">
+            <div class="col-12 col-lg-8 mx-auto">
+                <div class="card shadow-lg h-100 mx-auto">
+                    <div class="card-body">
+                        {% if partition.partition_pdf %}
+                            {% include 'components/pdf_viewer.html' with partition=partition hide_pdf_toggle=hide_pdf_toggle %}
+                        {% endif %}
+                        {% if aelf_psalm %}
+                            <div id="aelf-text-{{ partition.id }}" class="aelf-content-card">
+                                <div class="aelf-content">
+                                    <h2 class="h5 mb-3">
+                                        {% if aelf_psalm.kind == 'cantique' %}
+                                            Cantique
+                                        {% else %}
+                                            Psaume
+                                        {% endif %}
+                                        {% if aelf_psalm.ref %}<small class="text-muted ms-2">({{ aelf_psalm.ref }})</small>{% endif %}
+                                    </h2>
+                                    {% if aelf_psalm.titre %}<h4 class="h6">{{ aelf_psalm.titre }}</h4>{% endif %}
+                                    {% if aelf_psalm.refrain_psalmique %}
+                                        <div class="mb-2">
+                                            <span class="fw-bold text-dark">R/ {{ aelf_psalm.refrain_psalmique_inline|default:aelf_psalm.refrain_psalmique|striptags }}</span>
+                                            {% if aelf_psalm.ref_refrain or aelf_psalm.ref_refrain_display %}
+                                                <small class="text-muted">({{ aelf_psalm.ref_refrain_display|default:aelf_psalm.ref_refrain }})</small>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    <div class="fs-5 text-secondary">{{ aelf_psalm.contenu|safe }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elif aelf_psalm %}
+        <div class="row g-4 content-block-gap">
+            <div class="col-12 col-lg-8 mx-auto">
+                <div class="card shadow-lg aelf-content-card mx-auto">
+                    <div class="card-body">
+                        <div class="aelf-content">
+                            <h2 class="h5 mb-3">
+                                {% if aelf_psalm.kind == 'cantique' %}
+                                    Cantique
+                                {% else %}
+                                    Psaume
+                                {% endif %}
+                                {% if aelf_psalm.ref %}<small class="text-muted ms-2">({{ aelf_psalm.ref }})</small>{% endif %}
+                            </h2>
+                            {% if aelf_psalm.titre %}<h4 class="h6">{{ aelf_psalm.titre }}</h4>{% endif %}
+                            {% if aelf_psalm.refrain_psalmique %}
+                                <div class="mb-2">
+                                    <span class="fw-bold text-dark">R/ {{ aelf_psalm.refrain_psalmique_inline|default:aelf_psalm.refrain_psalmique|striptags }}</span>
+                                    {% if aelf_psalm.ref_refrain or aelf_psalm.ref_refrain_display %}
+                                        <small class="text-muted">({{ aelf_psalm.ref_refrain_display|default:aelf_psalm.ref_refrain }})</small>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            <div class="fs-5 text-secondary">{{ aelf_psalm.contenu|safe }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

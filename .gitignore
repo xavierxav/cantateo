@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+logs/
+local_settings.py
+db.sqlite3
+staticfiles/
+media/
+
+# Test / lint caches
+.pytest_cache/
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Backups
+.claude/backups/
+data_backup.json
+
+# Local Codex artifacts
+.codex
+
+# Local Kilo artifacts
+.kilo/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# SoundFonts (too large for git, download separately)
+soundfonts/*.sf2
+
+# Local agent scaffolding (not part of the product)
+.superpowers/
+.agent/
+.opencode/
+opencode.json
