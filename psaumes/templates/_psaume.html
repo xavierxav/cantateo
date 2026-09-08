@@ -1,7 +1,7 @@
 {% load liturgical_tags %}
 <div class="chant-container">
     {% if not hide_header %}
-        {% include 'components/chant_header.html' with partition=partition psaume=psaume aelf_info=aelf_info moment_liturgique=moment_liturgique hide_link=hide_link hide_dropdown=hide_dropdown %}
+        {% include 'components/psaume_header.html' with partition=partition psaume=psaume aelf_info=aelf_info moment_liturgique=moment_liturgique hide_link=hide_link hide_dropdown=hide_dropdown %}
     {% endif %}
     {% if partition %}
         {% if partition.has_audio or partition.partition_mxl %}

@@ -80,8 +80,8 @@ window.togglePdfViewer = function (viewerId, button, pdfUrl) {
   if (!viewer) return;
 
   const btnText = button && typeof button.querySelector === 'function' ? button.querySelector('.btn-text') : null;
-  const chantId = viewerId.split('-').pop();
-  const aelfText = document.getElementById(`aelf-text-${chantId}`);
+  const partitionId = viewerId.split('-').pop();
+  const aelfText = document.getElementById(`aelf-text-${partitionId}`);
   const parentCard = viewer.closest('.card');
   const isHidden = window.getComputedStyle(viewer).display === 'none';
   const openLabel = 'Masquer la partition';
@@ -113,10 +113,10 @@ window.togglePdfViewer = function (viewerId, button, pdfUrl) {
 
 async function loadPdf(viewerId, url) {
   const viewerEl = document.getElementById(viewerId);
-  const chantId = viewerId.replace('pdf-viewer-', '');
-  const canvas = document.getElementById(`pdf-canvas-${chantId}`);
-  const loadingEl = document.getElementById(`pdf-loading-${chantId}`);
-  const controlsEl = document.getElementById(`pdf-controls-${chantId}`);
+  const partitionId = viewerId.replace('pdf-viewer-', '');
+  const canvas = document.getElementById(`pdf-canvas-${partitionId}`);
+  const loadingEl = document.getElementById(`pdf-loading-${partitionId}`);
+  const controlsEl = document.getElementById(`pdf-controls-${partitionId}`);
 
   if (!canvas || typeof pdfjsLib === 'undefined') {
     if (loadingEl) {
@@ -134,14 +134,14 @@ async function loadPdf(viewerId, url) {
       loadingTask,
       currentPage: 1,
       scale: 1.5,
-      chantId,
+      partitionId,
       manualScale: false,
       viewerEl,
       controlsEl,
       syncControls: () => syncPdfControls(viewerId)
     };
 
-    const pageCountEl = document.getElementById(`pdf-page-count-${chantId}`);
+    const pageCountEl = document.getElementById(`pdf-page-count-${partitionId}`);
     if (pageCountEl) {
       pageCountEl.textContent = pdf.numPages;
     }
@@ -189,9 +189,9 @@ async function renderPage(viewerId) {
   const viewer = getViewerState(viewerId);
   if (!viewer) return;
 
-  const { pdf, currentPage, scale, chantId } = viewer;
-  const canvas = document.getElementById(`pdf-canvas-${chantId}`);
-  const container = document.getElementById(`pdf-canvas-container-${chantId}`);
+  const { pdf, currentPage, scale, partitionId } = viewer;
+  const canvas = document.getElementById(`pdf-canvas-${partitionId}`);
+  const container = document.getElementById(`pdf-canvas-container-${partitionId}`);
 
   if (!canvas || !container) return;
 
@@ -228,7 +228,7 @@ async function renderPage(viewerId) {
       viewport: renderViewport
     }).promise;
 
-    const pageNumEl = document.getElementById(`pdf-page-num-${chantId}`);
+    const pageNumEl = document.getElementById(`pdf-page-num-${partitionId}`);
     if (pageNumEl) {
       pageNumEl.textContent = currentPage;
     }
@@ -237,8 +237,8 @@ async function renderPage(viewerId) {
   }
 }
 
-window.pdfPrevPage = function (chantId) {
-  const viewerId = `pdf-viewer-${chantId}`;
+window.pdfPrevPage = function (partitionId) {
+  const viewerId = `pdf-viewer-${partitionId}`;
   const viewer = getViewerState(viewerId);
   if (!viewer || viewer.currentPage <= 1) return;
 
@@ -246,8 +246,8 @@ window.pdfPrevPage = function (chantId) {
   renderPage(viewerId);
 };
 
-window.pdfNextPage = function (chantId) {
-  const viewerId = `pdf-viewer-${chantId}`;
+window.pdfNextPage = function (partitionId) {
+  const viewerId = `pdf-viewer-${partitionId}`;
   const viewer = getViewerState(viewerId);
   if (!viewer || viewer.currentPage >= viewer.pdf.numPages) return;
 
@@ -255,8 +255,8 @@ window.pdfNextPage = function (chantId) {
   renderPage(viewerId);
 };
 
-window.pdfZoomIn = function (chantId) {
-  const viewerId = `pdf-viewer-${chantId}`;
+window.pdfZoomIn = function (partitionId) {
+  const viewerId = `pdf-viewer-${partitionId}`;
   const viewer = getViewerState(viewerId);
   if (!viewer) return;
 
@@ -268,8 +268,8 @@ window.pdfZoomIn = function (chantId) {
   renderPage(viewerId);
 };
 
-window.pdfZoomOut = function (chantId) {
-  const viewerId = `pdf-viewer-${chantId}`;
+window.pdfZoomOut = function (partitionId) {
+  const viewerId = `pdf-viewer-${partitionId}`;
   const viewer = getViewerState(viewerId);
   if (!viewer) return;
 
@@ -287,8 +287,8 @@ window.destroyAllPdfViewers = destroyAllPdfViewers;
 function autoOpenPdfViewers(root) {
   const scope = root && root.querySelectorAll ? root : document;
   scope.querySelectorAll('[id^="pdf-viewer-"][data-auto-open="true"]').forEach(viewer => {
-    const chantId = viewer.id.replace('pdf-viewer-', '');
-    const btn = document.getElementById(`pdf-toggle-btn-${chantId}`);
+    const partitionId = viewer.id.replace('pdf-viewer-', '');
+    const btn = document.getElementById(`pdf-toggle-btn-${partitionId}`);
     if (window.getComputedStyle(viewer).display === 'none') {
       window.togglePdfViewer(viewer.id, btn, viewer.dataset.pdfUrl);
     }
@@ -307,13 +307,13 @@ document.addEventListener('click', (event) => {
   if (action === 'toggle') {
     window.togglePdfViewer(control.dataset.viewerId, control, control.dataset.pdfUrl);
   } else if (action === 'zoom-out') {
-    window.pdfZoomOut(control.dataset.chantId);
+    window.pdfZoomOut(control.dataset.partitionId);
   } else if (action === 'zoom-in') {
-    window.pdfZoomIn(control.dataset.chantId);
+    window.pdfZoomIn(control.dataset.partitionId);
   } else if (action === 'prev') {
-    window.pdfPrevPage(control.dataset.chantId);
+    window.pdfPrevPage(control.dataset.partitionId);
   } else if (action === 'next') {
-    window.pdfNextPage(control.dataset.chantId);
+    window.pdfNextPage(control.dataset.partitionId);
   }
 });
 

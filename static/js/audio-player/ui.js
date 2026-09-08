@@ -17,10 +17,10 @@ const AudioUI = (function() {
   /**
    * Update progress bar and time labels
    */
-  function updateProgressUI(chantId, currentTime, duration) {
-    const progressBar = document.getElementById('progress-bar-' + chantId);
-    const currentTimeEl = document.getElementById('current-time-' + chantId);
-    const durationEl = document.getElementById('duration-' + chantId);
+  function updateProgressUI(partitionId, currentTime, duration) {
+    const progressBar = document.getElementById('progress-bar-' + partitionId);
+    const currentTimeEl = document.getElementById('current-time-' + partitionId);
+    const durationEl = document.getElementById('duration-' + partitionId);
 
     if (currentTimeEl) {
       currentTimeEl.textContent = formatTime(currentTime);
@@ -209,19 +209,19 @@ const AudioUI = (function() {
   /**
    * Show/hide player specific sections
    */
-  function setPlayerSectionVisibility(chantId, section, visible) {
-    const el = document.getElementById(`${section}-section-${chantId}`);
+  function setPlayerSectionVisibility(partitionId, section, visible) {
+    const el = document.getElementById(`${section}-section-${partitionId}`);
     if (el) el.style.display = visible ? 'block' : 'none';
   }
 
   /**
    * Add a download button for the mix
    */
-  function addMixDownloadButton(chantId, voice) {
-    if (document.getElementById(`mix-download-btn-${chantId}`)) return;
+  function addMixDownloadButton(partitionId, voice) {
+    if (document.getElementById(`mix-download-btn-${partitionId}`)) return;
 
     const btn = document.createElement('a');
-    btn.id = `mix-download-btn-${chantId}`;
+    btn.id = `mix-download-btn-${partitionId}`;
     btn.href = voice.download_url;
     btn.download = '';
     btn.className = 'btn btn-sm btn-primary p-2 shadow-sm d-flex align-items-center justify-content-center';
@@ -229,13 +229,13 @@ const AudioUI = (function() {
     btn.title = 'Télécharger MP3';
     btn.appendChild(createSvg(20, 20, 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z'));
 
-    const topActions = document.querySelector(`#draggable-player-${chantId} .audio-top-actions`);
+    const topActions = document.querySelector(`#draggable-player-${partitionId} .audio-top-actions`);
     if (topActions) {
       topActions.appendChild(btn);
       return;
     }
 
-    const audioSection = document.getElementById(`audio-player-section-${chantId}`);
+    const audioSection = document.getElementById(`audio-player-section-${partitionId}`);
     if (!audioSection || !audioSection.parentNode) return;
 
     const wrapper = document.createElement('div');
@@ -244,11 +244,11 @@ const AudioUI = (function() {
     audioSection.parentNode.insertBefore(wrapper, audioSection);
   }
 
-  function updatePlayPauseIcons(chantId, isPlaying) {
-    const playIcon = document.getElementById('play-icon-' + chantId);
-    const pauseIcon = document.getElementById('pause-icon-' + chantId);
-    const spinner = document.getElementById('play-spinner-' + chantId);
-    const playBtn = document.getElementById('play-pause-btn-' + chantId);
+  function updatePlayPauseIcons(partitionId, isPlaying) {
+    const playIcon = document.getElementById('play-icon-' + partitionId);
+    const pauseIcon = document.getElementById('pause-icon-' + partitionId);
+    const spinner = document.getElementById('play-spinner-' + partitionId);
+    const playBtn = document.getElementById('play-pause-btn-' + partitionId);
 
     if (spinner) spinner.style.display = 'none';
 
@@ -263,10 +263,10 @@ const AudioUI = (function() {
     }
   }
 
-  function updateSpeedDisplay(chantId, value) {
-    const display = document.getElementById('speed-display-' + chantId);
-    const slider = document.getElementById('speed-slider-' + chantId);
-    const appleControls = document.getElementById(`apple-speed-controls-${chantId}`);
+  function updateSpeedDisplay(partitionId, value) {
+    const display = document.getElementById('speed-display-' + partitionId);
+    const slider = document.getElementById('speed-slider-' + partitionId);
+    const appleControls = document.getElementById(`apple-speed-controls-${partitionId}`);
     const numeric = parseFloat(value);
     const normalized = Number.isFinite(numeric) ? numeric.toFixed(1) : '1.0';
     const label = `${normalized}x`;

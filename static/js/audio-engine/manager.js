@@ -2,14 +2,14 @@
  * PlayerManager - Manages multiple SyncedTrackPlayers
  */
 const WebAudioPlayerManager = (function() {
-  const players = new Map(); // chantId -> SyncedTrackPlayer
+  const players = new Map(); // partitionId -> SyncedTrackPlayer
 
-  function getPlayer(chantId) {
-    chantId = String(chantId);
-    if (!players.has(chantId)) {
-      players.set(chantId, new SyncedTrackPlayer(chantId));
+  function getPlayer(partitionId) {
+    partitionId = String(partitionId);
+    if (!players.has(partitionId)) {
+      players.set(partitionId, new SyncedTrackPlayer(partitionId));
     }
-    return players.get(chantId);
+    return players.get(partitionId);
   }
 
   return {

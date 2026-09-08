@@ -84,7 +84,7 @@ Variables: partition, has_non_synthetic_audio
                                 id="play-pause-btn-{{ partition.id }}"
                                 class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
                                 data-audio-action="play-pause"
-                                data-chant-id="{{ partition.id }}"
+                                data-partition-id="{{ partition.id }}"
                                 aria-label="Lire l'audio"
                                 aria-pressed="false"
                                 style="width: 44px;
@@ -128,7 +128,7 @@ Variables: partition, has_non_synthetic_audio
                                        aria-valuenow="0"
                                        aria-valuetext="0 pour cent"
                                        data-audio-action="seek"
-                                       data-chant-id="{{ partition.id }}"
+                                       data-partition-id="{{ partition.id }}"
                                        style="cursor: pointer;
                                               height: 4px">
                                 <span class="text-muted small" id="duration-{{ partition.id }}">0:00</span>
@@ -141,7 +141,7 @@ Variables: partition, has_non_synthetic_audio
                                 id="advanced-toggle-{{ partition.id }}"
                                 class="btn btn-sm btn-outline-secondary px-3"
                                 data-audio-action="advanced-toggle"
-                                data-chant-id="{{ partition.id }}"
+                                data-partition-id="{{ partition.id }}"
                                 aria-expanded="false"
                                 aria-controls="advanced-audio-{{ partition.id }}"
                                 aria-label="Afficher les options avancées"
@@ -269,7 +269,7 @@ Variables: partition, has_non_synthetic_audio
                                                aria-valuenow="1.0"
                                                aria-valuetext="1,0 fois"
                                                data-audio-action="speed"
-                                               data-chant-id="{{ partition.id }}">
+                                               data-partition-id="{{ partition.id }}">
                                     </div>
                                 </div>
                                 <div id="apple-speed-controls-{{ partition.id }}"
@@ -281,21 +281,21 @@ Variables: partition, has_non_synthetic_audio
                                             style="min-width: 4.5rem"
                                             data-audio-action="speed"
                                             data-speed-value="0.5"
-                                            data-chant-id="{{ partition.id }}"
+                                            data-partition-id="{{ partition.id }}"
                                             aria-pressed="false">0.5x</button>
                                     <button type="button"
                                             class="btn btn-outline-primary apple-speed-btn"
                                             style="min-width: 4.5rem"
                                             data-audio-action="speed"
                                             data-speed-value="1.0"
-                                            data-chant-id="{{ partition.id }}"
+                                            data-partition-id="{{ partition.id }}"
                                             aria-pressed="false">1.0x</button>
                                     <button type="button"
                                             class="btn btn-outline-primary apple-speed-btn"
                                             style="min-width: 4.5rem"
                                             data-audio-action="speed"
                                             data-speed-value="1.5"
-                                            data-chant-id="{{ partition.id }}"
+                                            data-partition-id="{{ partition.id }}"
                                             aria-pressed="false">1.5x</button>
                                 </div>
                             </div>
@@ -309,7 +309,7 @@ Variables: partition, has_non_synthetic_audio
                             <button type="button"
                                     class="btn btn-sm btn-outline-secondary px-3"
                                     data-audio-action="advanced-toggle"
-                                    data-chant-id="{{ partition.id }}"
+                                    data-partition-id="{{ partition.id }}"
                                     aria-expanded="true"
                                     aria-controls="advanced-audio-{{ partition.id }}"
                                     aria-label="Masquer les options avancées"

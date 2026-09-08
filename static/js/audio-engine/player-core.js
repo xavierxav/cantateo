@@ -5,8 +5,8 @@
  * This ensures perfect phase-coherence and zero drift, especially on iOS.
  */
 class SyncedTrackPlayer {
-  constructor(chantId) {
-    this.chantId = chantId;
+  constructor(partitionId) {
+    this.partitionId = partitionId;
     this.tracks = new Map();      // audioId -> {url, voiceType, audioElement, sourceNode, gainNode, volume, muted}
     this.buffers = new Map();     // voiceType -> AudioBuffer (for Safari 1.0x)
     this.bufferSources = [];      // Active buffer sources

@@ -22,7 +22,7 @@ Cantateo uses Django templates with Bootstrap 5 for a responsive, mobile-first U
 - `liturgical_header.html`: Sticky header with date navigation and current chant title.
 - `holy_saturday_special.html`: Special message for Holy Saturday (silence of the Church).
 - `easter_sunday_special.html`: Accordion for Easter (Vigil and Day Mass) linking to various moments.
-- `chant_header.html`: Standardized title and arrangement dropdown for various chant views.
+- `psaume_header.html`: Standardized title and arrangement dropdown for various chant views.
 - `liturgical_indicators.html`: Small helper for displaying liturgical colors and seasons.
 
 ### Partials (`templates/partials/`)

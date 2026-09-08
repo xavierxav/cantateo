@@ -52,9 +52,9 @@
         }
     };
 
-    window.updatePlaybackSpeedDisplay = window.updatePlaybackSpeedDisplay || function (chantId, value) {
+    window.updatePlaybackSpeedDisplay = window.updatePlaybackSpeedDisplay || function (partitionId, value) {
         if (typeof AudioUI !== 'undefined' && AudioUI.updateSpeedDisplay) {
-            AudioUI.updateSpeedDisplay(chantId, value);
+            AudioUI.updateSpeedDisplay(partitionId, value);
         }
     };
 
