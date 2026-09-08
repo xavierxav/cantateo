@@ -21,7 +21,7 @@ sentry-sdk>=2.68.1
 # Cache backend (optional, fallback to LocMemCache if not available)
 django-redis>=5.4
 redis>=5.0
-hiredis>=2.0  # For better Redis parser performance
+hiredis>=3.4.1  # For better Redis parser performance
 
 # Audio generation from MXL (MusicXML)
 music21>=9.9.2
