@@ -24,7 +24,7 @@ redis>=5.0
 hiredis>=2.0  # For better Redis parser performance
 
 # Audio generation from MXL (MusicXML)
-music21>=9.1
+music21>=9.9.2
 midi2audio>=0.1.1
 pydub>=0.25.1  # WAV to MP3 conversion
 mutagen>=1.48.1  # MP3 validation (check duration, bitrate, integrity)
