@@ -27,7 +27,7 @@ hiredis>=2.0  # For better Redis parser performance
 music21>=9.1
 midi2audio>=0.1.1
 pydub>=0.25.1  # WAV to MP3 conversion
-mutagen>=1.47.0  # MP3 validation (check duration, bitrate, integrity)
+mutagen>=1.48.1  # MP3 validation (check duration, bitrate, integrity)
 
 # Developer tools
 djlint>=1.36.0  # Django HTML formatter

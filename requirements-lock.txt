@@ -21,5 +21,5 @@ hiredis==3.3.0
 music21==9.9.1
 midi2audio==0.1.1
 pydub==0.25.1
-mutagen==1.47.0
+mutagen==1.48.1
 djlint==1.36.4
