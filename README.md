@@ -17,6 +17,7 @@ French Django app serving the daily liturgical psalm with PDF score and multi-tr
 - **Calendar navigation** — any date, next-Sunday jump, liturgical year view
 - **Search** — accent-insensitive fuzzy search (PostgreSQL `pg_trgm` + `unaccent`)
 - **Audio engine** — Web Audio multitrack mixer, tempo variants, Safari-safe playback
+- **LLM import pipeline** — PDFs → structured psalm data + metadata via the Google Gemini API (`import_scripts/`)
 - **Production guardrails** — CSP nonces, rate limits, upload validators, health checks
 
 ## Stack
