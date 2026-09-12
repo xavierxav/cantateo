@@ -1,0 +1,15 @@
+/* Main entry point for Cantateo CSS */
+
+/* Base & Library Overrides */
+@import 'calendar.css';
+
+/* Components */
+@import 'components/layout.css';
+@import 'components/liturgy.css';
+@import 'components/search.css';
+@import 'components/pdf-viewer.css';
+@import 'components/audio-player.css';
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}

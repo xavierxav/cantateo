@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Ordinaires de messe — Cantateo{% endblock %}
+{% block meta_description %}Ordinaires de messe (Kyrie, Gloria, Sanctus, Agnus Dei...) avec partitions PDF et pistes audio mp3 à 4 voix pour la liturgie.{% endblock %}
+{% block meta_keywords %}ordinaire de messe, Kyrie, Gloria, Sanctus, Agnus Dei, partition PDF, audio MP3, SATB, liturgie, catholique{% endblock %}
+{% block canonical_url %}{{ site_url }}{% url 'ordinaire_list' %}{% endblock %}
+{% block social_meta %}
+<meta property="og:title" content="Ordinaires de messe — Cantateo">
+<meta property="og:description" content="Ordinaires de messe (Kyrie, Gloria, Sanctus, Agnus Dei...) avec partitions PDF et pistes audio mp3 à 4 voix pour la liturgie.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ site_url }}{{ request.path }}">
+<meta property="og:image" content="{{ site_url }}{% static 'icons/icon-512.png' %}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ordinaires de messe — Cantateo">
+<meta name="twitter:description" content="Ordinaires de messe avec partitions PDF et pistes audio mp3 à 4 voix.">
+{% endblock %}
+{% block content %}
+    <div class="chant-container">
+        <div class="row justify-content-center content-block-gap">
+            <div class="col-lg-10 col-md-12">
+                <div class="card shadow-sm mb-4 text-center w-100">
+                    <div class="card-body py-4">
+                        <h1 class="h2 mb-0 fw-bold">Ordinaires de messe</h1>
+                    </div>
+                </div>
+                {% if ordinaires %}
+                    <div class="row g-4">
+                        {% for ordinaire in ordinaires %}
+                            <div class="col-md-6">
+                                <a href="{{ ordinaire.get_absolute_url }}"
+                                   class="card shadow-sm h-100 text-decoration-none text-reset w-100">
+                                    <div class="card-body">
+                                        <h2 class="h5 mb-1 fw-bold">{{ ordinaire.titre }}</h2>
+                                        {% if ordinaire.compositeur %}
+                                            <p class="text-muted small mb-2">
+                                                <i class="bi bi-person-fill me-1"></i>{{ ordinaire.compositeur }}
+                                            </p>
+                                        {% endif %}
+                                        <div class="mb-2">
+                                            {% for partition in ordinaire.parties_ordonnees %}
+                                                <span class="badge bg-primary me-1 mb-1">{{ partition.get_partie_messe_display }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        <p class="small text-muted mb-0">
+                                            <i class="bi bi-music-note-beamed me-1"></i>
+                                            {{ ordinaire.partitions_messe.count }} partie{{ ordinaire.partitions_messe.count|pluralize }}
+                                            · partitions PDF
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <p class="mb-0">Aucun ordinaire de messe pour l'instant.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

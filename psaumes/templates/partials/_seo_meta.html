@@ -1,0 +1,24 @@
+{% load static %}
+{% if partition %}
+    <meta property="og:title" content="{{ partition.titre }} - Cantateo">
+    <meta property="og:description"
+          content="Partition PDF et audio MP3 (Soprano, Alto, Ténor, Basse) du {{ psaume.nom_psaume }}{% if partition.compositeur %} par {{ partition.compositeur }}{% endif %}. {% if psaume.moments_liturgiques.all %}Usage : {% for m in psaume.moments_liturgiques.all %}{{ m }}{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}">
+    <meta property="og:type" content="music.song">
+    {% if partition.compositeur %}<meta property="music:musician" content="{{ partition.compositeur }}">{% endif %}
+    <meta name="twitter:title" content="{{ partition.titre }} - Cantateo">
+    <meta name="twitter:description"
+          content="Partition PDF et audio MP3 (Soprano, Alto, Ténor, Basse) du {{ psaume.nom_psaume }}.">
+{% else %}
+    <meta property="og:title"
+          content="Cantateo - Psaumes et cantiques liturgiques">
+    <meta property="og:description"
+          content="Découvrez les psaumes et cantiques liturgiques avec partitions PDF et pistes audio 4 voix mp3.">
+    <meta name="twitter:title" content="Cantateo - Psaumes et cantiques">
+    <meta name="twitter:description"
+          content="Partitions PDF et audio mp3 pour la liturgie">
+{% endif %}
+<meta property="og:url"
+      content="{{ site_url }}{{ request.path }}">
+<meta property="og:image"
+      content="{{ site_url }}{% static 'icons/icon-512.png' %}">
+<meta name="twitter:card" content="summary">

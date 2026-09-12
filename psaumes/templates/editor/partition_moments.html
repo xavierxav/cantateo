@@ -1,0 +1,75 @@
+{% extends "editor/base.html" %}
+
+{% block editor_breadcrumbs %} &rsaquo; Nouvelle partition &rsaquo; Moments{% endblock %}
+
+{% block content %}
+    <h1>Nouvelle partition - étape 1</h1>
+    <p>Choisir un moment liturgique existant, ou créer un ou plusieurs moments liturgiques.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <section class="simplified-editor-panel">
+            <h2>Choisir un moment existant</h2>
+            {{ selection_form.moments.errors }}
+            <label for="moment-search">Rechercher</label>
+            <input id="moment-search"
+                   class="vTextField simplified-editor-search"
+                   type="search"
+                   placeholder="Rechercher un moment liturgique..."
+                   autocomplete="off"
+                   data-moment-search>
+            <p class="simplified-editor-help">
+                <span data-moment-selected-count>0</span> moment(s) sélectionné(s).
+                Cocher ou décocher les moments à utiliser.
+            </p>
+            <div class="simplified-moment-picker" data-moment-picker>
+                {{ selection_form.moments }}
+            </div>
+        </section>
+        <section class="simplified-editor-panel">
+            <h2>Créer des moments</h2>
+            <p class="simplified-editor-help">Remplir une ligne par moment. Les lignes vides sont ignorées.</p>
+            {{ creation_formset.management_form }}
+            <table class="simplified-editor-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Temps</th>
+                        <th>Semaine</th>
+                        <th>Jour</th>
+                        <th>Parité</th>
+                        <th>Année</th>
+                        <th>Nom de fête</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in creation_formset %}
+                        <tr>
+                            <td>{{ form.type_moment.errors }}{{ form.type_moment }}</td>
+                            <td>{{ form.temps.errors }}{{ form.temps }}</td>
+                            <td>{{ form.semaine.errors }}{{ form.semaine }}</td>
+                            <td>{{ form.jour.errors }}{{ form.jour }}</td>
+                            <td>{{ form.parite.errors }}{{ form.parite }}</td>
+                            <td>{{ form.annee.errors }}{{ form.annee }}</td>
+                            <td>{{ form.nom_fete.errors }}{{ form.nom_fete }}</td>
+                        </tr>
+                        {% if form.non_field_errors %}
+                            <tr>
+                                <td colspan="7" class="simplified-editor-error">{{ form.non_field_errors }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        <div class="simplified-editor-actions">
+            <button type="submit" class="default">Continuer</button>
+            <a class="button" href="{% url 'simplified_dashboard' %}">Annuler</a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {% load static %}
+    <script src="{% static 'admin/js/simplified_moment_picker.js' %}" defer></script>
+{% endblock %}

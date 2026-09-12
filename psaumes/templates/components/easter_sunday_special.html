@@ -1,0 +1,129 @@
+<div class="chant-container">
+    <div class="row g-4 content-block-gap">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="accordion shadow-lg border-0 rounded-4 overflow-hidden mb-4 glass-accordion"
+                 id="easterAccordion">
+                <!-- Title inside the card -->
+                <div class="p-4 border-bottom border-light text-center">
+                    <h2 class="h1 mb-0 fw-bold animate-fade-in text-dark">Résurrection du Seigneur</h2>
+                </div>
+                <!-- Section VEILLÉE PASCALE -->
+                <div class="accordion-item border-0 bg-transparent">
+                    <h2 class="accordion-header" id="headingVigile">
+                        <button class="accordion-button fs-4 fw-bold py-4 text-dark bg-transparent"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseVigile"
+                                aria-expanded="true"
+                                aria-controls="collapseVigile">
+                            <i class="bi bi-stars me-3 text-warning"></i> VEILLÉE PASCALE
+                        </button>
+                    </h2>
+                    <div id="collapseVigile"
+                         class="accordion-collapse collapse show"
+                         aria-labelledby="headingVigile"
+                         data-bs-parent="#easterAccordion">
+                        <div class="accordion-body p-0">
+                            <div class="list-group list-group-flush bg-transparent">
+                                {% for moment in vigile_moments %}
+                                    <a href="{{ moment.psaume.get_absolute_url }}"
+                                       class="list-group-item list-group-item-action py-3 px-4 border-start border-4 border-light-subtle bg-transparent hover-bg-light">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="h5 mb-0 fw-bold text-dark">{{ moment.nom_fete }}</span>
+                                            <span class="badge rounded-pill bg-primary px-3">{{ moment.psaume.nom_psaume }}</span>
+                                        </div>
+                                        <p class="mb-0 text-muted small">{{ moment.psaume.titre }}</p>
+                                        {% if "7 bis" in moment.nom_fete %}
+                                            <div class="mt-2 py-1 px-2 bg-warning-subtle rounded border-start border-3 border-warning small fw-semibold">
+                                                <i class="bi bi-info-circle-fill text-warning me-2"></i>Remarque: on prend le 7
+                                                bis
+                                                (psaume 50) quand il y a un baptême.
+                                            </div>
+                                        {% endif %}
+                                    </a>
+                                {% empty %}
+                                    <div class="p-4 text-center text-muted italic">Partitions bientôt disponibles</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Section MESSE DU JOUR -->
+                <div class="accordion-item border-0 bg-transparent border-top border-light">
+                    <h2 class="accordion-header" id="headingMesse">
+                        <button class="accordion-button fs-4 fw-bold py-4 text-dark bg-transparent collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseMesse"
+                                aria-expanded="false"
+                                aria-controls="collapseMesse">
+                            <i class="bi bi-sun-fill me-3 text-warning"></i> MESSE DU JOUR DE PÂQUES
+                        </button>
+                    </h2>
+                    <div id="collapseMesse"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingMesse"
+                         data-bs-parent="#easterAccordion">
+                        <div class="accordion-body p-0">
+                            <div class="list-group list-group-flush bg-transparent">
+                                {% for moment in messe_moments %}
+                                    <a href="{{ moment.psaume.get_absolute_url }}"
+                                       class="list-group-item list-group-item-action py-3 px-4 border-start border-4 border-light-subtle bg-transparent hover-bg-light">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="h5 mb-0 fw-bold text-dark">Messe du jour</span>
+                                            <span class="badge rounded-pill bg-primary px-3">{{ moment.psaume.nom_psaume }}</span>
+                                        </div>
+                                        <p class="mb-0 text-muted small">{{ moment.psaume.titre }}</p>
+                                    </a>
+                                {% empty %}
+                                    <div class="p-4 text-center text-muted italic">Partitions bientôt disponibles</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .glass-accordion {
+        background-color: rgba(255, 255, 255, 0.65) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .hover-bg-light:hover {
+        background-color: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .glass-accordion .accordion-button:not(.collapsed) {
+        box-shadow: none;
+        background-color: rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .glass-accordion .accordion-button:focus {
+        box-shadow: none;
+    }
+
+    .glass-accordion .accordion-button::after {
+        filter: contrast(0.5);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+</style>

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load liturgical_tags %}
+{% block title %}
+    {{ psaume.nom_psaume }} - {{ partition.titre|default:"Partition et audio mp3" }}
+    | Cantateo
+{% endblock %}
+{% block meta_description %}
+    Partition PDF et audio MP3 (Soprano, Alto, Ténor, Basse) du {{ psaume.nom_psaume }}
+    {% if partition.compositeur %}par {{ partition.compositeur }}{% endif %}.
+    {% if psaume.moments_liturgiques.all %}Pour : {% for m in psaume.moments_liturgiques.all %}{{ m }}{% if not forloop.last %}, {% endif %}{% endfor %}.{% endif %}
+    {{ partition.refrain|truncatewords:10|default:"Chant liturgique avec pistes vocales pour chorale." }}
+{% endblock %}
+{% block meta_keywords %}{{ psaume.nom_psaume }}, partition PDF, audio MP3, soprano, alto, ténor, basse, liturgie, catholique{% if psaume.moments_liturgiques.all %}, {% for m in psaume.moments_liturgiques.all %}{{ m }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}{% endblock %}
+{% block canonical_url %}{{ site_url }}{{ psaume.get_absolute_url }}{% endblock %}
+{% block social_meta %}
+    {% include 'partials/_seo_meta.html' %}
+{% endblock %}
+{% block extra_meta %}
+    <meta name="robots" content="index, follow">
+{% endblock %}
+{% block structured_data %}
+    {% for item in structured_data %}
+    <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+{{ item|json_ld }}
+    </script>
+    {% endfor %}
+{% endblock %}
+{% block content %}
+    <div id="psaume-main">
+        <div id="psaume-details"
+             data-has-chant="{% if partition %}true{% else %}false{% endif %}">
+            {% include 'components/liturgical_header.html' with moment_liturgique=psaume.moments_liturgiques.first     hide_link=True hide_date_nav=True %}
+            {% include '_psaume.html' with psaume=psaume partition=partition moment_liturgique=psaume.moments_liturgiques.first     hide_link=True hide_dropdown=True hide_header=True hide_pdf_toggle=True %}
+        </div>
+    </div>
+    {% if psaume.moments_liturgiques.all %}
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Moments liturgiques</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for moment in psaume.moments_liturgiques.all %}<li class="list-group-item">{{ moment }}</li>{% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if partition and partition.pk %}
+    {% with memes=memes_versets autres=autres_versets_psaumes %}
+    {% if memes or autres %}
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light text-center">
+            <h5 class="mb-0">Autres arrangements de ce psaume</h5>
+        </div>
+        {% if memes %}
+        <div class="card-body pb-1">
+            <h6 class="text-muted mb-2 fs-7">Mêmes versets (même dates)</h6>
+        </div>
+        <div class="list-group list-group-flush">
+            {% for p in memes %}
+            <a href="?partition={{ p.id }}"
+               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <span>
+                    {{ p.titre|default:"Sans titre" }}
+                </span>
+                <span class="text-muted small">
+                    {% if p.compositeur %}{{ p.compositeur }}{% endif %}
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if autres %}
+        <div class="card-body pb-1">
+            <h6 class="text-muted mb-2 fs-7">Autres versets (autres dates)</h6>
+        </div>
+        <div class="list-group list-group-flush">
+            {% for other in autres %}
+                {% for p in other.partitions.all %}
+                <a href="{{ other.get_absolute_url }}"
+                   class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ p.titre|default:"Sans titre" }}
+                        </span>
+                        <span class="text-muted small">
+                            {% if p.compositeur %}{{ p.compositeur }}{% endif %}
+                            {% if other.moments_liturgiques.all %}
+                                &middot; {% for m in other.moments_liturgiques.all %}{{ m }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                </a>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+{% endblock %}

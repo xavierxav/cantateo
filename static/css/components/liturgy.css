@@ -1,0 +1,19 @@
+/* Liturgy sticky headers and offsets */
+
+@media (min-width: 768px) {
+    .liturgical-header.sticky-top {
+        top: 56px !important;
+        position: sticky !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .navbar.fixed-top {
+        position: relative !important;
+    }
+    
+    .liturgical-header.sticky-top {
+        position: relative !important;
+        top: 0 !important;
+    }
+}

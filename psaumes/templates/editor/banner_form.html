@@ -1,0 +1,23 @@
+{% extends "editor/base.html" %}
+{% load banner_tags %}
+
+{% block editor_breadcrumbs %} &rsaquo; <a href="{% url 'simplified_banner_list' %}">Messages du site</a> &rsaquo; Message{% endblock %}
+
+{% block content %}
+    <h1>{% if banner %}Modifier le message{% else %}Nouveau message{% endif %}</h1>
+    <p class="simplified-editor-help">Markdown sécurisé autorisé : **gras**, *italique*, liens [texte](/url), icônes :info:, :warning:, :music:, :calendar:, :check:.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.instance.text %}
+            <section class="simplified-editor-panel">
+                <h2>Aperçu</h2>
+                <div>{{ form.instance.text|banner_rich_text }}</div>
+            </section>
+        {% endif %}
+        <div class="simplified-editor-actions">
+            <button type="submit" class="default">Enregistrer</button>
+            <a class="button" href="{% url 'simplified_banner_list' %}">Annuler</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,76 @@
+/* PDF Viewer with PDF.js */
+.pdf-viewer-container {
+    position: relative;
+    background: #f8f9fa;
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.pdf-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.pdf-controls {
+    position: absolute !important;
+    bottom: 25px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 999 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25) !important;
+    border: 1px solid rgba(0,0,0,0.15) !important;
+    pointer-events: auto !important;
+}
+
+.pdf-controls .btn:focus-visible {
+    outline: 2px solid rgba(13, 110, 253, 0.4);
+    outline-offset: 2px;
+}
+
+.pdf-canvas-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 85vh;
+    text-align: center;
+    background: #e9ecef;
+    border-radius: 4px;
+    padding: 1rem 1rem 4rem 1rem;
+}
+
+.pdf-canvas {
+    max-width: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    background: #fff;
+}
+
+@media (max-width: 768px) {
+    .pdf-viewer-container {
+        padding: 0.5rem;
+    }
+
+    .pdf-canvas-container {
+        max-height: 70vh;
+        padding: 0.5rem;
+    }
+
+    .pdf-controls {
+        padding: 0.25rem;
+    }
+
+    .pdf-controls .btn {
+        padding: 0.25rem 0.5rem;
+    }
+}

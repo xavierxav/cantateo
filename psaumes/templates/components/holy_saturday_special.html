@@ -1,0 +1,27 @@
+<div class="chant-container">
+    <div class="row g-4 content-block-gap">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="card shadow-lg h-100 mx-auto">
+                <div class="card-body">
+                    <div class="aelf-content-card">
+                        <div class="aelf-content">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-info-circle-fill text-primary fs-3 me-3"></i>
+                                <h4 class="h5 mb-0 fw-bold">Samedi Saint</h4>
+                            </div>
+                            <p class="fs-5 mb-4">Le Samedi saint, l'Église demeure auprès du tombeau dans le silence.</p>
+                            <hr class="my-4">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                <p class="mb-0 fw-semibold text-muted">Pour la veillée pascale, voir au Dimanche de Pâques.</p>
+                                <a href="{% url 'index' %}?date={{ date_paques|date:'Y-m-d' }}"
+                                   class="btn btn-primary shadow-sm px-4">
+                                    Aller au Dimanche de Pâques <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

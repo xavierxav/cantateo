@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Mentions légales - Cantateo{% endblock %}
+{% block meta_description %}Mentions légales de Cantateo : édition, hébergement, contact et propriété des contenus.{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <article class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h2 mb-4">Mentions légales</h1>
+                    <p>
+                        Cantateo met à disposition des partitions et fichiers audio pour soutenir le chant
+                        des psaumes dans la liturgie.
+                    </p>
+                    <h2 class="h5 mt-4">Contact</h2>
+                    <p>
+                        Pour toute question concernant le site ou un contenu publié, utilisez la page
+                        <a href="{% url 'contact' %}">Contact</a>.
+                    </p>
+                    <h2 class="h5 mt-4">Hébergement</h2>
+                    <p>
+                        L'application est hébergée sur un VPS Hetzner. Les médias peuvent être stockés sur
+                        Cloudflare R2.
+                    </p>
+                    <h2 class="h5 mt-4">Contenus</h2>
+                    <p>
+                        Les partitions, textes et enregistrements restent soumis aux droits et autorisations
+                        propres à leurs auteurs, compositeurs et sources liturgiques.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </div>
+{% endblock %}

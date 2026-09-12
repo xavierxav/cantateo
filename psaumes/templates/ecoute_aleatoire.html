@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Écoute aléatoire - Cantateo{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-body text-center">
+                    <h1 class="h4 mb-4">Écoute aléatoire</h1>
+                    {% if psaume %}
+                        <p class="mb-3">
+                            <a href="{{ psaume.get_absolute_url }}" class="text-decoration-none">
+                                <strong>{{ partition.titre|default:psaume.nom_complet }}</strong>
+                            </a>
+                            {% if partition.titre %}
+                                <br>
+                                <small class="text-muted">{{ psaume.nom_psaume }}</small>
+                            {% endif %}
+                        </p>
+                        <audio controls autoplay class="w-100 mb-4">
+                            <source src="{{ audio_url }}" type="audio/mpeg">
+                        </audio>
+                        <a href="{% url 'ecoute_aleatoire' %}" class="btn btn-primary">
+                            <i class="bi bi-shuffle"></i> Autre chant
+                        </a>
+                    {% else %}
+                        <p class="text-muted">Aucun mix audio disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

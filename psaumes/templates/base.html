@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        {% load banner_tags static %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}Cantateo — Partitions et audios de psaumes{% endblock %}
+        </title>
+        <!-- Base meta tags -->
+        <meta name="description"
+              content="{% block meta_description %}Cantateo : partitions PDF et pistes audio mp3 de psaumes et cantiques pour la liturgie.{% endblock %}">
+        <meta name="author" content="Cantateo">
+        <meta name="robots" content="index, follow">
+        <!-- Canonical tag -->
+        <link rel="canonical"
+              href="{% block canonical_url %}{{ site_url }}{{ request.path }}{% endblock %}">
+        <!-- OpenGraph / Social Media -->
+        {% block social_meta %}
+            <meta property="og:title"
+                  content="{% block og_title %}Cantateo — Partitions et audios de psaumes{% endblock %}">
+            <meta property="og:description"
+                  content="{% block og_description %}Découvrez les psaumes et cantiques liturgiques avec partitions PDF et pistes audio mp3.{% endblock %}">
+            <meta property="og:type" content="website">
+            <meta property="og:url" content="{{ site_url }}{{ request.path }}">
+            <meta property="og:image"
+                  content="{{ site_url }}{% static 'icons/icon-512.png' %}">
+            <meta name="twitter:card" content="summary">
+            <meta name="twitter:title"
+                  content="{% block twitter_title %}Cantateo — Partitions et audios de psaumes{% endblock %}">
+            <meta name="twitter:description"
+                  content="{% block twitter_description %}Partitions PDF et audios mp3 de psaumes pour la liturgie.{% endblock %}">
+        {% endblock %}
+        <!-- Custom meta blocks for page-specific overrides -->
+        {% block extra_meta %}{% endblock %}
+
+        <link rel="icon"
+              type="image/png"
+              sizes="192x192"
+              href="{% static 'icons/icon-192.png' %}">
+        <meta name="theme-color" content="#0d6efd">
+        <link rel="stylesheet"
+              href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+        <link rel="stylesheet"
+              href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}">
+        <link rel="stylesheet"
+              href="{% static 'vendor/flatpickr/flatpickr.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <!-- Structured Data (JSON-LD) -->
+        <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Cantateo",
+    "url": "{{ site_url }}",
+    "logo": "{{ site_url }}{% static 'icons/icon-192.png' %}",
+    "description": "Psaumes et cantiques liturgiques avec partitions PDF et pistes audio (Soprano, Alto, Ténor, Basse)",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Contact",
+      "url": "{{ site_url }}{% url 'contact' %}"
+    }
+  }
+        </script>
+        <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Cantateo",
+    "url": "{{ site_url }}",
+    "description": "Partitions PDF et pistes audio de psaumes pour la liturgie"
+  }
+        </script>
+        <!-- Page-specific structured data block -->
+        {% block structured_data %}{% endblock %}
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body style="padding-top: 60px;">
+        <a class="skip-link visually-hidden-focusable" href="#main-content">Aller au contenu</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand me-lg-5 fw-bold fs-5" href="{% url 'index' %}">Psaumes</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Autocomplete Search Bar -->
+                    <form class="navbar-search-shell d-flex mx-auto position-relative"
+                          id="navbar-search-form"
+                          style="max-width: 500px;
+                                 flex: 1">
+                        <input type="search"
+                               class="form-control"
+                               id="navbar-search"
+                               name="q"
+                               placeholder="Rechercher un psaume, une messe..."
+                               style="font-size: 1.1rem;
+                                      padding: 0.5rem 1rem"
+                               autocomplete="off"
+                               role="combobox"
+                               aria-autocomplete="list"
+                               aria-haspopup="listbox"
+                               aria-expanded="false"
+                               aria-controls="autocomplete-dropdown"
+                               aria-activedescendant=""
+                               hx-get="{% url 'search_autocomplete' %}"
+                               hx-trigger="keyup changed delay:300ms"
+                               hx-target="#autocomplete-dropdown"
+                               hx-swap="innerHTML">
+                        <div id="autocomplete-dropdown"
+                             class="autocomplete-dropdown position-absolute w-100 bg-white shadow rounded-bottom"
+                             role="listbox"
+                             aria-label="Résultats de recherche"
+                             style="display: none"></div>
+                    </form>
+                    <ul class="navbar-nav ms-auto gap-lg-3 gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3"
+                               style="font-size: 1.1rem"
+                               href="{% url 'histoire' %}">Histoire</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3"
+                               style="font-size: 1.1rem"
+                               href="{% url 'ordinaire_list' %}">Ordinaires de messe</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3"
+                               style="font-size: 1.1rem"
+                               href="{% url 'contact' %}">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3"
+                               style="font-size: 1.1rem"
+                               href="{% url 'ecoute_aleatoire' %}">Écoute aléatoire</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3"
+                               style="font-size: 1.1rem"
+                               href="{% url 'blog' %}">Blog</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% if site_banner %}
+            <div id="site-banner-overlay"
+                 class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                 style="background: rgba(0,0,0,0.5);
+                        z-index: 9999"
+                 data-banner-id="{{ site_banner.updated_at|date:'U' }}">
+                <div class="bg-white rounded shadow-lg p-4 mx-3 text-center position-relative d-flex flex-column"
+                     style="max-width: 500px;
+                            max-height: 85vh">
+                    <button type="button"
+                            class="btn-close position-absolute top-0 end-0 m-2"
+                            id="banner-close-btn"
+                            aria-label="Fermer"></button>
+                    <div class="fs-6 mt-2 overflow-auto">
+                        {{ site_banner.text|banner_rich_text }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <main class="container-fluid px-lg-4 px-md-3" id="main-content">
+            {% block content %}{% endblock %}
+        </main>
+        <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"
+                defer></script>
+        <script>
+            window.CANTATEO_PDF_WORKER_SRC = "{% static 'vendor/pdfjs/pdf.worker.min.js' %}";
+        </script>
+        <script src="{% static 'vendor/pdfjs/pdf.min.js' %}"
+                defer></script>
+        <script src="{% static 'vendor/htmx/htmx.min.js' %}" defer></script>
+        <script src="{% static 'vendor/flatpickr/flatpickr.min.js' %}"></script>
+        <script src="{% static 'vendor/flatpickr/l10n/fr.js' %}"></script>
+        <!-- Audio Engine Modules -->
+        <script src="{% static 'js/audio-engine/context.js' %}" defer></script>
+        <script src="{% static 'js/audio-engine/player-core.js' %}" defer></script>
+        <script src="{% static 'js/audio-engine/manager.js' %}" defer></script>
+        <script src="{% static 'js/audio-player/ui.js' %}" defer></script>
+        <script src="{% static 'js/audio-player/polling.js' %}" defer></script>
+        <script src="{% static 'js/audio-player/controls.js' %}?v=1" defer></script>
+        <script src="{% static 'js/audio-player/initializer.js' %}" defer></script>
+        <script src="{% static 'js/pdf-viewer.js' %}" defer></script>
+        <script src="{% static 'js/autocomplete.js' %}" defer></script>
+        <script src="{% static 'js/draggable.js' %}" defer></script>
+        <script src="{% static 'js/banner.js' %}" defer></script>
+        {% block extra_scripts %}{% endblock %}
+        <footer class="listing-card card shadow-sm p-3 mx-3 mt-4 text-center small">
+            <a href="{% url 'toutes_les_partitions' %}"
+               class="text-decoration-none me-2">Toutes les partitions</a>
+            <span class="text-muted">&middot;</span>
+            <a href="{% url 'calendrier_liturgique' %}"
+               class="text-decoration-none ms-2">Calendrier liturgique</a>
+        </footer>
+    </body>
+</html>

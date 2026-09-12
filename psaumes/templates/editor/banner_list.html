@@ -1,0 +1,45 @@
+{% extends "editor/base.html" %}
+
+{% block editor_breadcrumbs %} &rsaquo; Messages du site{% endblock %}
+
+{% block content %}
+    <h1>Messages du site</h1>
+    <p class="simplified-editor-help">Un seul message peut être actif à la fois. Activer un message désactive les autres.</p>
+    <div class="simplified-editor-actions">
+        <a class="button" href="{% url 'simplified_banner_create' %}">Nouveau message</a>
+    </div>
+    <table class="simplified-editor-table">
+        <thead>
+            <tr>
+                <th>Texte</th>
+                <th>Actif</th>
+                <th>Période</th>
+                <th>Mis à jour</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banner in banners %}
+                <tr>
+                    <td>{{ banner.text|truncatechars:100 }}</td>
+                    <td>{% if banner.active %}Oui{% else %}Non{% endif %}</td>
+                    <td>
+                        {% if banner.start_date %}{{ banner.start_date }}{% else %}Sans début{% endif %}
+                        -
+                        {% if banner.end_date %}{{ banner.end_date }}{% else %}Sans fin{% endif %}
+                    </td>
+                    <td>{{ banner.updated_at }}</td>
+                    <td>
+                        <a href="{% url 'simplified_banner_update' banner.pk %}">Modifier</a>
+                        |
+                        <a href="{% url 'simplified_banner_delete' banner.pk %}">Supprimer</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Aucun message.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

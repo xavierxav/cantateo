@@ -1,0 +1,27 @@
+[Unit]
+Description=Cantateo Django Application
+After=network.target postgresql.service redis.service
+
+[Service]
+User=cantateo
+Group=cantateo
+WorkingDirectory=/var/www/cantateo
+Environment="PATH=/var/www/cantateo/venv/bin"
+EnvironmentFile=/var/www/cantateo/.env
+ExecStart=/var/www/cantateo/venv/bin/gunicorn \
+    --workers 3 \
+    --bind unix:/var/www/cantateo/cantateo.sock \
+    --access-logfile /var/log/cantateo/access.log \
+    --error-logfile /var/log/cantateo/error.log \
+    psalm_project.wsgi:application
+
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/www/cantateo /var/log/cantateo
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,64 @@
+{% load liturgical_tags %}
+{% comment %}
+  Reusable header for a chant (Psaume or Cantique).
+  Variables:
+    - partition: Partition object (optional)
+    - psaume: Psaume object (required)
+    - aelf_info: Liturgical info (optional)
+    - moment_liturgique: Fallback liturgical info (optional)
+    - hide_link: Boolean
+    - hide_dropdown: Boolean
+{% endcomment %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h1 class="h3 mb-1">
+            {% if partition %}
+                {% if psaume.get_absolute_url and not hide_link %}
+                    <a href="{{ psaume.get_absolute_url }}"
+                       class="text-decoration-none text-dark">{{ partition.titre }}</a>
+                    <a href="{{ psaume.get_absolute_url }}"
+                       class="ms-2 text-muted"
+                       title="Voir la page du psaume"
+                       style="font-size: 0.5em;
+                              vertical-align: middle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                        </svg>
+                    </a>
+                {% else %}
+                    {{ partition.titre }}
+                {% endif %}
+            {% else %}
+                <span class="text-danger">Pas encore de partition pour le psaume du jour</span>
+            {% endif %}
+        </h1>
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+            <span class="badge bg-primary">{{ psaume.nom_psaume }}</span>
+            {% if partition.compositeur %}
+                <span class="badge bg-secondary d-none d-md-inline-block">{{ partition.compositeur }}</span>
+            {% endif %}
+            {% if aelf_info %}
+                {% include 'components/liturgical_indicators.html' with aelf_info=aelf_info %}
+            {% elif moment_liturgique %}
+                <span class="text-muted small ms-2">{{ moment_liturgique }}</span>
+            {% endif %}
+        </div>
+    </div>
+    {% if not hide_dropdown and psaume.partitions.count > 1 %}
+        <div class="dropdown">
+            <button class="btn btn-outline-primary btn-sm dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown">Arrangements</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                {% for p in psaume.partitions.all %}
+                    <li>
+                        <a class="dropdown-item {% if partition and p.id == partition.id %}active{% endif %}"
+                           href="{% if p.psaume.get_absolute_url %}{{ p.psaume.get_absolute_url }}{% else %}#{% endif %}?partition={{ p.id }}">{{ p.titre }}
+                            {% if p.compositeur %}({{ p.compositeur }}){% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,33 @@
+[Unit]
+Description=Cantateo Celery Worker
+After=network.target postgresql.service redis.service cantateo.service
+Requires=redis.service
+
+[Service]
+User=cantateo
+Group=cantateo
+WorkingDirectory=/var/www/cantateo
+Environment="PATH=/var/www/cantateo/venv/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/var/www/cantateo/.env
+ExecStart=/var/www/cantateo/venv/bin/celery \
+    -A psalm_project worker \
+    --loglevel=info \
+    --queues=audio \
+    --concurrency=1 \
+    --prefetch-multiplier=1 \
+    --hostname=audio@%H
+
+Restart=always
+RestartSec=5
+Nice=10
+CPUWeight=60
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/www/cantateo /var/log/cantateo
+
+[Install]
+WantedBy=multi-user.target
