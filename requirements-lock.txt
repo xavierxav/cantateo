@@ -16,7 +16,7 @@ django-storages==1.14.6
 boto3==1.43.93
 sentry-sdk==2.68.1
 django-redis==6.0.0
-redis==7.1.0
+redis==7.4.1
 hiredis==3.3.0
 music21==9.9.2
 midi2audio==0.1.1
